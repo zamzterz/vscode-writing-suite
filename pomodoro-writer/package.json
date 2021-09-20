@@ -1,0 +1,100 @@
+{
+	"name": "pomodoro-writer",
+	"displayName": "pomodoro-writer",
+	"description": "Pomodoro timer combined with an optional word count goal.",
+	"publisher": "zamzterz",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/zamzterz/vscode-writing-suite.git"
+	},
+	"license": "MIT",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.60.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./dist/extension.js",
+	"icon": "images/icon.png",
+	"contributes": {
+		"commands": [
+			{
+				"command": "pomodoro-writer.start",
+				"title": "Start pomodoro"
+			},
+			{
+				"command": "pomodoro-writer.pause",
+				"title": "Start pomodoro"
+			},
+			{
+				"command": "pomodoro-writer.reset",
+				"title": "Reset pomodoro"
+			},
+			{
+				"command": "pomodoro-writer.setWorkMinute",
+				"title": "Set pomodoro time, in minutes"
+			},
+			{
+				"command": "pomodoro-writer.setWordCountGoal",
+				"title": "Set pomodoro word count goal"
+			}
+		],
+		"keybindings": [
+			{
+				"key": "escape escape",
+				"command": "pomodoro-writer.toggleZenMode",
+				"when": "inZenMode"
+			}
+		],
+		"configuration": {
+			"title": "PomodoroWriter",
+			"properties": {
+				"pomodoro-writer.zenMode.autoEnabled": {
+					"type": "boolean",
+					"default": false,
+					"description": "Automatically activate Zen Mode when timer (re)starts."
+				},
+				"pomodoro-writer.zenMode.fontSize": {
+					"type": [
+						"number",
+						"null"
+					],
+					"default": null,
+					"minimum": 6,
+					"maximum": 100,
+					"description": "Custom editor font size when auto Zen Mode is activated."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run build",
+		"build": "parcel build src/extension.ts --dist-dir dist --no-source-maps",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js",
+		"test:unit": "mocha --ui tdd --require ts-node/register './src/test/unit/**/**.test.ts'"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.2.2",
+		"@types/node": "14.x",
+		"@types/vscode": "^1.60.0",
+		"@typescript-eslint/eslint-plugin": "^4.26.0",
+		"@typescript-eslint/parser": "^4.26.0",
+		"eslint": "^7.27.0",
+		"glob": "^7.1.7",
+		"mocha": "^8.4.0",
+		"parcel": "^2.0.0-rc.0",
+		"ts-node": "^10.2.1",
+		"typescript": "^4.3.2",
+		"vsce": "^1.100.1",
+		"vscode-test": "^1.5.2"
+	}
+}
