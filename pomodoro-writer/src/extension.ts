@@ -196,7 +196,9 @@ class PomodoroWriter {
 	}
 
 	public updateWordCount(document: TextDocument) {
-		this.throttledWordCountOperation(document);
+		if (this.timer.isRunning) {
+			this.throttledWordCountOperation(document);
+		}
 	}
 
 	public reloadConfig() {
@@ -282,7 +284,8 @@ class PomodoroWriter {
 
 	private displayWordCount() {
 		if (this.wordCountGoal) {
-			this.statusBarWordCountText.text = `${this.runningWordCount.runningTotal}/${this.wordCountGoal}`;
+			const currentTotal = this.timer.isRunning ? this.runningWordCount.runningTotal : '-';
+			this.statusBarWordCountText.text = `${currentTotal}/${this.wordCountGoal}`;
 		} else {
 			this.statusBarWordCountText.text = '-/-';
 		}

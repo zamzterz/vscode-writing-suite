@@ -36,6 +36,10 @@ export class Timer {
 		this._remainingSeconds = newStartSeconds || this.startSeconds;
 	}
 
+	public get isRunning(): boolean {
+		return this.timerId !== null;
+	}
+
 	private tick() {
 		this._remainingSeconds -= this.intervalMillis / 1000;
 		if (this._remainingSeconds <= 0) {
