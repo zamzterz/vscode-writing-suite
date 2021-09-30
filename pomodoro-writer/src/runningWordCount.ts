@@ -40,7 +40,7 @@ export class RunningWordCount {
 		}
 		const result = Array.from(wordCountDiff.values())
 			.reduce((previousValue: number, currentValue: number) => {
-				return previousValue + currentValue
+				return previousValue + currentValue;
 		  	}, 0);
 		return result;
 	}

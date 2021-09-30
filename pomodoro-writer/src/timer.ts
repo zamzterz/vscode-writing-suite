@@ -12,7 +12,7 @@ export class Timer {
 	}
 
 	public start(tickCallback: () => void) {
-		if (this.timerId == null) {
+		if (this.timerId === null) {
 			this.timerId = setInterval(() => {
 				this.tick();
 				tickCallback();
@@ -24,7 +24,7 @@ export class Timer {
 	}
 
 	public stop() {
-		if (this.timerId != null) {
+		if (this.timerId !== null) {
 			clearInterval(this.timerId);
 		}
 

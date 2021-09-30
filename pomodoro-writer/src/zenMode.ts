@@ -25,7 +25,7 @@ export class ZenMode {
 			vscode.commands.executeCommand('workbench.action.toggleZenMode');
 
 			const editorConfig = vscode.workspace.getConfiguration('editor');
-			const configTarget = editorConfig.inspect('fontSize')?.workspaceValue == undefined ? vscode.ConfigurationTarget.Global : vscode.ConfigurationTarget.Workspace;
+			const configTarget = editorConfig.inspect('fontSize')?.workspaceValue === undefined ? vscode.ConfigurationTarget.Global : vscode.ConfigurationTarget.Workspace;
 			if (this._isActive && this.config.fontSize) {
 				// set configured font-size
 				vscode.workspace.getConfiguration('editor').update(

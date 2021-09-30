@@ -7,7 +7,7 @@ import * as vscode from 'vscode';
 suite('Word Count Tests', () => {
 	test('Word count', async () => {
 		const document = await vscode.workspace.openTextDocument(path.resolve(__dirname, '../../../src/test/suite/testdata.txt'));
-		const editor = await vscode.window.showTextDocument(document)
+		const editor = await vscode.window.showTextDocument(document);
 
 		const text = "\nAdditional words are added at the beginning";
 		await editor.edit(edit => {

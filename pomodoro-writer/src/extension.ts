@@ -7,7 +7,7 @@ import { ZenMode } from './zenMode';
 const extensionName = 'pomodoro-writer';
 const defaultConfig = {
 	zenMode: { autoEnabled: false },
-}
+};
 
 export function activate(context: ExtensionContext) {
 	const workMinutes = context.workspaceState.get(`${extensionName}.workMinutes`, 20);
@@ -38,7 +38,7 @@ export function activate(context: ExtensionContext) {
 			if (newWorkMinutes !== null) {
 				context.workspaceState.update(`${extensionName}.workMinutes`, newWorkMinutes);
 			}
-		})
+		});
 	});
 
 	const setWordCountGoalDisposable = commands.registerCommand(`${extensionName}.setWordCountGoal`, () => {
@@ -101,9 +101,9 @@ class PomodoroWriter {
 		this.zenMode = new ZenMode(defaultConfig.zenMode);
 		this.throttledWordCountOperation = throttledFunction((document) => {
 			this.runningWordCount.update(document.fileName, document.getText(), () => {
-				this.displayWordCount()
+				this.displayWordCount();
 
-				if (this.wordCountGoal && this.runningWordCount.runningTotal == this.wordCountGoal) {
+				if (this.wordCountGoal && this.runningWordCount.runningTotal === this.wordCountGoal) {
 					let message = 'You\'ve reached the word goal, keep up the great work!';
 					window.showInformationMessage(message);
 				}
@@ -156,7 +156,7 @@ class PomodoroWriter {
 
 				window.showInformationMessage(message, 'Restart')
 					.then((selection) => {
-						if (selection == 'Restart') {
+						if (selection === 'Restart') {
 							this.reset();
 							this.start();
 						}
@@ -247,7 +247,7 @@ class PomodoroWriter {
 		});
 
 		if (newWordGoal) {
-			const parsed = parseInt(newWordGoal, 10)
+			const parsed = parseInt(newWordGoal, 10);
 			this.wordCountGoal = parsed;
 			this.displayWordCount();
 			return parsed;

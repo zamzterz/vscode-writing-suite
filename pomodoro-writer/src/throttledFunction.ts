@@ -18,5 +18,5 @@ export function throttledFunction(f: (...args: any[]) => void, delayMillis: numb
 		setTimeout(() => {
 			throttled = false;
 		}, delayMillis);
-	}
+	};
 }
