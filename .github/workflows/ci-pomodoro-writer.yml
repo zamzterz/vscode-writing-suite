@@ -1,0 +1,27 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, lint the code, and run tests
+
+name: Run linting and tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pomodoro-writer
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        cache: 'npm'
+        cache-dependency-path: pomodoro-writer/package-lock.json
+    - run: npm ci
+    - run: npm run lint
+    - run: npm run test:unit
