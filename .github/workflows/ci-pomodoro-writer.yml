@@ -1,6 +1,6 @@
-# This workflow will do a clean install of node dependencies, cache/restore them, lint the code, and run tests
+# This workflow will do a clean install of node dependencies, cache/restore them, lint the code, run tests, and release a new version (if it's a tagged commit)
 
-name: Run linting and tests
+name: CI for pomodoro-writer
 
 on:
   push:
@@ -8,12 +8,13 @@ on:
   pull_request:
     branches: [ main ]
 
+defaults:
+  run:
+    working-directory: pomodoro-writer
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: pomodoro-writer
 
     steps:
     - uses: actions/checkout@v2
@@ -25,3 +26,12 @@ jobs:
     - run: npm ci
     - run: npm run lint
     - run: npm run test:unit
+
+  release:
+    runs-on: ubuntu-latest
+    if: success() && startsWith(github.ref, 'refs/tags/')
+    env:
+      VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+    steps:
+      - run: npm run deploy

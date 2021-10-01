@@ -75,6 +75,7 @@
 		"vscode:prepublish": "npm run build",
 		"build": "parcel build src/extension.ts --dist-dir dist --no-source-maps",
 		"compile": "tsc -p ./",
+		"deploy": "vsce publish",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts --max-warnings=0",
