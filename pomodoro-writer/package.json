@@ -77,7 +77,7 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
+		"lint": "eslint src --ext ts --max-warnings=0",
 		"test": "node ./out/test/runTest.js",
 		"test:unit": "mocha --ui tdd --require ts-node/register './src/test/unit/**/**.test.ts'"
 	},
