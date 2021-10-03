@@ -5,9 +5,11 @@ Pomodoro timer combined with an optional word count goal for each session.
 ## Features
 
 Simply start the timer from the status bar:
+
 ![Timer and word count in status bar](images/start_timer.gif)
 
 To change the work time or word count goal, click each item and enter the value:
+
 ![Change work time or word count goal](images/change_settings.gif)
 
 
