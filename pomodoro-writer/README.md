@@ -15,12 +15,7 @@ To change the work time or word count goal, click each item and enter the value:
 
 ## Extension Settings
 
-This extension contributes the following settings:
-
-* `pomodoro-writer.autoZenMode`: enable/disable automatic toggling of Zen Mode when (re)starting the timer
-* `pomodoro-writer.zenModeFontSize`: custom font size to use when in Zen Mode
-
-It is also recommended to show the status bar and allow notifications in Zen Mode if you enable "auto Zen Mode":
+It is recommended to show the status bar and allow notifications in Zen Mode (if you use that) to know when the timer ends and the word count goal is reached:
 ```json
  "zenMode.hideStatusBar": false,
  "zenMode.silentNotifications": false

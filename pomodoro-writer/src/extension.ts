@@ -2,12 +2,8 @@ import { window, workspace, commands, ConfigurationChangeEvent, Disposable, Exte
 import { RunningWordCount } from './runningWordCount';
 import { throttledFunction } from './throttledFunction';
 import { Timer } from './timer';
-import { ZenMode } from './zenMode';
 
 const extensionName = 'pomodoro-writer';
-const defaultConfig = {
-	zenMode: { autoEnabled: false },
-};
 
 export function activate(context: ExtensionContext) {
 	const workMinutes = context.workspaceState.get(`${extensionName}.workMinutes`, 20);
@@ -29,10 +25,6 @@ export function activate(context: ExtensionContext) {
 		pomodoroWriter.reset();
 	});
 
-	const toggleZenModeDisposable = commands.registerCommand(`${extensionName}.toggleZenMode`, () => {
-		pomodoroWriter.toggleZenMode();
-	});
-
 	const setWorkMinutesDisposable = commands.registerCommand(`${extensionName}.setWorkMinutes`, () => {
 		pomodoroWriter.setWorkMinutes().then(newWorkMinutes => {
 			if (newWorkMinutes !== null) {
@@ -49,7 +41,7 @@ export function activate(context: ExtensionContext) {
 		});
 	});
 
-	context.subscriptions.push(startDisposable, pauseDisposable, resetDisposable, setWorkMinutesDisposable, setWordCountGoalDisposable, toggleZenModeDisposable);
+	context.subscriptions.push(startDisposable, pauseDisposable, resetDisposable, setWorkMinutesDisposable, setWordCountGoalDisposable);
 }
 
 export function deactivate() {}
@@ -62,11 +54,6 @@ class PomodoroWriterController {
 
 		workspace.onDidChangeTextDocument((event: TextDocumentChangeEvent) => {
 			pomodoroWriter.updateWordCount(event.document);
-		}, this, subscriptions);
-		workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
-			if (event.affectsConfiguration(`${extensionName}`)) {
-				pomodoroWriter.reloadConfig();
-			}
 		}, this, subscriptions);
 		workspace.onDidOpenTextDocument((document: TextDocument) => {
 			// store initial word count for document
@@ -84,7 +71,6 @@ class PomodoroWriterController {
 class PomodoroWriter { 
 	private timer: Timer;
 	private runningWordCount: RunningWordCount;
-	private zenMode: ZenMode;
 	private throttledWordCountOperation: (document: TextDocument) => void;
 
 	// UI properties
@@ -98,7 +84,6 @@ class PomodoroWriter {
 				private wordCountGoal: number = 250) {
 		this.timer = new Timer(workMinutes * 60);
 		this.runningWordCount = new RunningWordCount();
-		this.zenMode = new ZenMode(defaultConfig.zenMode);
 		this.throttledWordCountOperation = throttledFunction((document) => {
 			this.runningWordCount.update(document.fileName, document.getText(), () => {
 				this.displayWordCount();
@@ -109,8 +94,6 @@ class PomodoroWriter {
 				}
 			});
 		}, 100);
-
-		this.reloadConfig();
 
 		// create UI
 		this.statusBarTimerText = window.createStatusBarItem(StatusBarAlignment.Left);
@@ -166,10 +149,6 @@ class PomodoroWriter {
 		});
 
 		this.displayWordCount();
-
-		if (!this.zenMode.isActive) {
-			this.toggleZenMode();
-		}
 	}
 
 	public pause() {
@@ -199,12 +178,6 @@ class PomodoroWriter {
 		if (this.timer.isRunning) {
 			this.throttledWordCountOperation(document);
 		}
-	}
-
-	public reloadConfig() {
-		const config = workspace.getConfiguration();
-		const zenModeConfig = config.get(`${extensionName}.zenMode`, defaultConfig.zenMode);
-		this.zenMode.update(zenModeConfig);
 	}
 
 	public async setWorkMinutes(): Promise<number | null> {
@@ -256,10 +229,6 @@ class PomodoroWriter {
 		}
 
 		return null;
-	}
-
-	public toggleZenMode() {
-		this.zenMode.toggle();
 	}
 
 	public dispose() {

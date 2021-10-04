@@ -42,34 +42,7 @@
 				"command": "pomodoro-writer.setWordCountGoal",
 				"title": "Set pomodoro word count goal"
 			}
-		],
-		"keybindings": [
-			{
-				"key": "escape escape",
-				"command": "pomodoro-writer.toggleZenMode",
-				"when": "inZenMode"
-			}
-		],
-		"configuration": {
-			"title": "PomodoroWriter",
-			"properties": {
-				"pomodoro-writer.zenMode.autoEnabled": {
-					"type": "boolean",
-					"default": false,
-					"description": "Automatically activate Zen Mode when timer (re)starts."
-				},
-				"pomodoro-writer.zenMode.fontSize": {
-					"type": [
-						"number",
-						"null"
-					],
-					"default": null,
-					"minimum": 6,
-					"maximum": 100,
-					"description": "Custom editor font size when auto Zen Mode is activated."
-				}
-			}
-		}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run build",
