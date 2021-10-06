@@ -2,9 +2,9 @@ export class Timer {
 	private timerId: NodeJS.Timer | null = null;
 	private _remainingSeconds: number;
 
-	constructor(private startSeconds: number = 0, private intervalMillis: number = 1000) {
+	constructor(private durationSeconds: number = 0, private intervalMillis: number = 1000) {
 		this.timerId = null;
-		this._remainingSeconds = startSeconds;
+		this._remainingSeconds = durationSeconds;
 	}
 	
 	public get remainingSeconds(): number {
@@ -31,9 +31,13 @@ export class Timer {
 		this.timerId = null;
 	}
 
-	public reset(newStartSeconds?: number) {
+	public reset(newDurationSeconds?: number) {
 		this.stop();
-		this._remainingSeconds = newStartSeconds || this.startSeconds;
+		if (newDurationSeconds) {
+			this.durationSeconds = newDurationSeconds;
+		}
+
+		this._remainingSeconds = this.durationSeconds;
 	}
 
 	public get isRunning(): boolean {
