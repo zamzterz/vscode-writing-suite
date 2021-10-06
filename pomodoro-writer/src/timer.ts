@@ -33,7 +33,11 @@ export class Timer {
 
 	public reset(newStartSeconds?: number) {
 		this.stop();
-		this._remainingSeconds = newStartSeconds || this.startSeconds;
+		if (newStartSeconds) {
+			this.startSeconds = newStartSeconds;
+		}
+
+		this._remainingSeconds = this.startSeconds;
 	}
 
 	public get isRunning(): boolean {
