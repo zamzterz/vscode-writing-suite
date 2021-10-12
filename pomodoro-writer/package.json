@@ -42,7 +42,22 @@
 				"command": "pomodoro-writer.setWordCountGoal",
 				"title": "Set pomodoro word count goal"
 			}
-		]
+		],
+		"configuration": {
+			"title": "Pomodoro Writer",
+			"properties": {
+				"pomodoro-writer.statusBar.showTimer": {
+					"type": "boolean",
+					"default": true,
+					"description": "Show timer."
+				},
+				"pomodoro-writer.statusBar.showWordCountGoal": {
+					"type": "boolean",
+					"default": true,
+					"description": "Show word count goal."
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run build",
