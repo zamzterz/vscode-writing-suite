@@ -28,7 +28,7 @@
 			},
 			{
 				"command": "pomodoro-writer.pause",
-				"title": "Start pomodoro"
+				"title": "Pause pomodoro"
 			},
 			{
 				"command": "pomodoro-writer.reset",
