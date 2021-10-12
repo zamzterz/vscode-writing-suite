@@ -4,18 +4,24 @@ Pomodoro timer combined with an optional word count goal for each session.
 
 ## Features
 
-Simply start the timer from the status bar:
+Simply start the timer from the status bar (or via command "Start pomodoro"):
 
 ![Timer and word count in status bar](images/start_timer.gif)
 
-To change the work time or word count goal, click each item and enter the value:
+To change the work time or word count goal, click each item and enter the value (or via command "Set pomodoro time" and "Set pomodoro word count goal" respectively):
 
 ![Change work time or word count goal](images/change_settings.gif)
 
 
 ## Extension Settings
 
-It is recommended to show the status bar and allow notifications in Zen Mode (if you use that) to know when the timer ends and the word count goal is reached:
+This extension contributes the following settings:
+
+* `pomodoro-writer.statusBar.showTimer`: whether the timer countdown should be visible in the status bar
+* `pomodoro-writer.statusBar.showWordCountGoal`: whether the timer countdown should be visible in the status bar
+
+
+It is also recommended to show the status bar and allow notifications in Zen Mode (if you use that) to know when the timer ends and the word count goal is reached:
 ```json
  "zenMode.hideStatusBar": false,
  "zenMode.silentNotifications": false

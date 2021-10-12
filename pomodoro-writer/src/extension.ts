@@ -59,6 +59,11 @@ class PomodoroWriterController {
 			// store initial word count for document
 			pomodoroWriter.updateWordCount(document);
 		}, this, subscriptions);
+		workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
+			if (event.affectsConfiguration(extensionName)) {
+				pomodoroWriter.reloadConfig();
+			}
+		}, this, subscriptions);
 
 		this.disposable = Disposable.from(...subscriptions);
 	}
@@ -96,31 +101,33 @@ class PomodoroWriter {
 		}, 100);
 
 		// create UI
-		this.statusBarTimerText = window.createStatusBarItem(StatusBarAlignment.Left);
+		this.statusBarTimerText = window.createStatusBarItem(StatusBarAlignment.Left, 5);
 		this.statusBarTimerText.command = `${extensionName}.setWorkMinutes`;
 		this.statusBarTimerText.tooltip = 'Change work minutes';
 		this.displayRemainingTime();
 
-		this.statusBarWordCountText = window.createStatusBarItem(StatusBarAlignment.Left);
+		this.statusBarWordCountText = window.createStatusBarItem(StatusBarAlignment.Left, 4);
 		this.statusBarWordCountText.command = `${extensionName}.setWordCountGoal`;
 		this.statusBarWordCountText.tooltip = 'Change word count goal';
 		this.displayWordCount();
 
-		this.statusBarStartButton = window.createStatusBarItem(StatusBarAlignment.Left);
+		this.statusBarStartButton = window.createStatusBarItem(StatusBarAlignment.Left, 3);
 		this.statusBarStartButton.text = '$(play)';
 		this.statusBarStartButton.command = `${extensionName}.start`;
 		this.statusBarStartButton.tooltip = 'Start pomodoro';
 		this.statusBarStartButton.show();
 
-		this.statusBarPauseButton = window.createStatusBarItem(StatusBarAlignment.Left);
+		this.statusBarPauseButton = window.createStatusBarItem(StatusBarAlignment.Left, 2);
 		this.statusBarPauseButton.text = '$(debug-pause)';
 		this.statusBarPauseButton.command = `${extensionName}.pause`;
 		this.statusBarPauseButton.tooltip = 'Pause pomodoro';
 
-		this.statusBarResetButton = window.createStatusBarItem(StatusBarAlignment.Left);
+		this.statusBarResetButton = window.createStatusBarItem(StatusBarAlignment.Left, 1);
 		this.statusBarResetButton.text = '$(debug-restart)';
 		this.statusBarResetButton.command = `${extensionName}.reset`;
 		this.statusBarResetButton.tooltip = 'Reset pomodoro';
+
+		this.reloadConfig();
 	}
 
 	public start() {
@@ -242,13 +249,21 @@ class PomodoroWriter {
 		this.statusBarResetButton.dispose();
 	}
 
+	public reloadConfig() {
+		const toggleStatusBarItem = (item: StatusBarItem, visible: boolean) => {
+			visible ? item.show() : item.hide();
+		};
+		const config = workspace.getConfiguration(extensionName);
+		toggleStatusBarItem(this.statusBarTimerText, config.get('statusBar.showTimer') === true);
+		toggleStatusBarItem(this.statusBarWordCountText, config.get('statusBar.showWordCountGoal') === true);
+	}
+
 	private displayRemainingTime() {
 		const seconds = this.timer.remainingSeconds % 60;
 		const minutes = (this.timer.remainingSeconds - seconds) / 60;
 
 		const text = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 		this.statusBarTimerText.text = text;
-		this.statusBarTimerText.show();
 	}
 
 	private displayWordCount() {
@@ -258,6 +273,5 @@ class PomodoroWriter {
 		} else {
 			this.statusBarWordCountText.text = '-/-';
 		}
-		this.statusBarWordCountText.show();
 	}
 }
