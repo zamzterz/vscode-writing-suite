@@ -5,9 +5,13 @@ name: CI for pomodoro-writer
 on:
   push:
     branches: [ main ]
-    tags: '*'
+    paths:
+      - 'pomodoro-writer/**'
+    tags: 'pomodoro-writer/*'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'pomodoro-writer/**'
 
 defaults:
   run:
