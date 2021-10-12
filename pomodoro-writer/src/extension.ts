@@ -252,7 +252,7 @@ class PomodoroWriter {
 	public reloadConfig() {
 		const toggleStatusBarItem = (item: StatusBarItem, visible: boolean) => {
 			visible ? item.show() : item.hide();
-		}
+		};
 		const config = workspace.getConfiguration(extensionName);
 		toggleStatusBarItem(this.statusBarTimerText, config.get('statusBar.showTimer') === true);
 		toggleStatusBarItem(this.statusBarWordCountText, config.get('statusBar.showWordCountGoal') === true);
