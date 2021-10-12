@@ -1,6 +1,6 @@
 {
 	"name": "pomodoro-writer",
-	"displayName": "pomodoro-writer",
+	"displayName": "Pomodoro Writer",
 	"description": "Pomodoro timer combined with an optional word count goal.",
 	"publisher": "zamzterz",
 	"repository": {
@@ -23,35 +23,35 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "pomodoro-writer.start",
+				"command": "pomodoroWriter.start",
 				"title": "Start pomodoro"
 			},
 			{
-				"command": "pomodoro-writer.pause",
+				"command": "pomodoroWriter.pause",
 				"title": "Pause pomodoro"
 			},
 			{
-				"command": "pomodoro-writer.reset",
+				"command": "pomodoroWriter.reset",
 				"title": "Reset pomodoro"
 			},
 			{
-				"command": "pomodoro-writer.setWorkMinute",
+				"command": "pomodoroWriter.setWorkMinute",
 				"title": "Set pomodoro time, in minutes"
 			},
 			{
-				"command": "pomodoro-writer.setWordCountGoal",
+				"command": "pomodoroWriter.setWordCountGoal",
 				"title": "Set pomodoro word count goal"
 			}
 		],
 		"configuration": {
 			"title": "Pomodoro Writer",
 			"properties": {
-				"pomodoro-writer.statusBar.showTimer": {
+				"pomodoroWriter.statusBar.showTimer": {
 					"type": "boolean",
 					"default": true,
 					"description": "Show timer."
 				},
-				"pomodoro-writer.statusBar.showWordCountGoal": {
+				"pomodoroWriter.statusBar.showWordCountGoal": {
 					"type": "boolean",
 					"default": true,
 					"description": "Show word count goal."

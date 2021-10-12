@@ -3,40 +3,40 @@ import { RunningWordCount } from './runningWordCount';
 import { throttledFunction } from './throttledFunction';
 import { Timer } from './timer';
 
-const extensionName = 'pomodoro-writer';
+const extensionPrefix = 'pomodoroWriter';
 
 export function activate(context: ExtensionContext) {
-	const workMinutes = context.workspaceState.get(`${extensionName}.workMinutes`, 20);
-	const wordCountGoal = context.workspaceState.get(`${extensionName}.wordCountGoal`, 250);
+	const workMinutes = context.workspaceState.get(`${extensionPrefix}.workMinutes`, 20);
+	const wordCountGoal = context.workspaceState.get(`${extensionPrefix}.wordCountGoal`, 250);
 	
 	const pomodoroWriter = new PomodoroWriter(workMinutes, wordCountGoal);
 	const pomodoroWriterController = new PomodoroWriterController(pomodoroWriter);
 	context.subscriptions.push(pomodoroWriter, pomodoroWriterController);
 
-	const startDisposable = commands.registerCommand(`${extensionName}.start`, () => {
+	const startDisposable = commands.registerCommand(`${extensionPrefix}.start`, () => {
 		pomodoroWriter.start();
 	});
 
-	const pauseDisposable = commands.registerCommand(`${extensionName}.pause`, () => {
+	const pauseDisposable = commands.registerCommand(`${extensionPrefix}.pause`, () => {
 		pomodoroWriter.pause();
 	});
 
-	const resetDisposable = commands.registerCommand(`${extensionName}.reset`, () => {
+	const resetDisposable = commands.registerCommand(`${extensionPrefix}.reset`, () => {
 		pomodoroWriter.reset();
 	});
 
-	const setWorkMinutesDisposable = commands.registerCommand(`${extensionName}.setWorkMinutes`, () => {
+	const setWorkMinutesDisposable = commands.registerCommand(`${extensionPrefix}.setWorkMinutes`, () => {
 		pomodoroWriter.setWorkMinutes().then(newWorkMinutes => {
 			if (newWorkMinutes !== null) {
-				context.workspaceState.update(`${extensionName}.workMinutes`, newWorkMinutes);
+				context.workspaceState.update(`${extensionPrefix}.workMinutes`, newWorkMinutes);
 			}
 		});
 	});
 
-	const setWordCountGoalDisposable = commands.registerCommand(`${extensionName}.setWordCountGoal`, () => {
+	const setWordCountGoalDisposable = commands.registerCommand(`${extensionPrefix}.setWordCountGoal`, () => {
 		pomodoroWriter.setWordCountGoal().then(newWordCountGoal => {
 			if (newWordCountGoal !== null) {
-				context.workspaceState.update(`${extensionName}.wordCountGoal`, newWordCountGoal);
+				context.workspaceState.update(`${extensionPrefix}.wordCountGoal`, newWordCountGoal);
 			}
 		});
 	});
@@ -60,7 +60,7 @@ class PomodoroWriterController {
 			pomodoroWriter.updateWordCount(document);
 		}, this, subscriptions);
 		workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
-			if (event.affectsConfiguration(extensionName)) {
+			if (event.affectsConfiguration(extensionPrefix)) {
 				pomodoroWriter.reloadConfig();
 			}
 		}, this, subscriptions);
@@ -102,29 +102,29 @@ class PomodoroWriter {
 
 		// create UI
 		this.statusBarTimerText = window.createStatusBarItem(StatusBarAlignment.Left, 5);
-		this.statusBarTimerText.command = `${extensionName}.setWorkMinutes`;
+		this.statusBarTimerText.command = `${extensionPrefix}.setWorkMinutes`;
 		this.statusBarTimerText.tooltip = 'Change work minutes';
 		this.displayRemainingTime();
 
 		this.statusBarWordCountText = window.createStatusBarItem(StatusBarAlignment.Left, 4);
-		this.statusBarWordCountText.command = `${extensionName}.setWordCountGoal`;
+		this.statusBarWordCountText.command = `${extensionPrefix}.setWordCountGoal`;
 		this.statusBarWordCountText.tooltip = 'Change word count goal';
 		this.displayWordCount();
 
 		this.statusBarStartButton = window.createStatusBarItem(StatusBarAlignment.Left, 3);
 		this.statusBarStartButton.text = '$(play)';
-		this.statusBarStartButton.command = `${extensionName}.start`;
+		this.statusBarStartButton.command = `${extensionPrefix}.start`;
 		this.statusBarStartButton.tooltip = 'Start pomodoro';
 		this.statusBarStartButton.show();
 
 		this.statusBarPauseButton = window.createStatusBarItem(StatusBarAlignment.Left, 2);
 		this.statusBarPauseButton.text = '$(debug-pause)';
-		this.statusBarPauseButton.command = `${extensionName}.pause`;
+		this.statusBarPauseButton.command = `${extensionPrefix}.pause`;
 		this.statusBarPauseButton.tooltip = 'Pause pomodoro';
 
 		this.statusBarResetButton = window.createStatusBarItem(StatusBarAlignment.Left, 1);
 		this.statusBarResetButton.text = '$(debug-restart)';
-		this.statusBarResetButton.command = `${extensionName}.reset`;
+		this.statusBarResetButton.command = `${extensionPrefix}.reset`;
 		this.statusBarResetButton.tooltip = 'Reset pomodoro';
 
 		this.reloadConfig();
@@ -253,7 +253,7 @@ class PomodoroWriter {
 		const toggleStatusBarItem = (item: StatusBarItem, visible: boolean) => {
 			visible ? item.show() : item.hide();
 		};
-		const config = workspace.getConfiguration(extensionName);
+		const config = workspace.getConfiguration(extensionPrefix);
 		toggleStatusBarItem(this.statusBarTimerText, config.get('statusBar.showTimer') === true);
 		toggleStatusBarItem(this.statusBarWordCountText, config.get('statusBar.showWordCountGoal') === true);
 	}
