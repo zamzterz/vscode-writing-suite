@@ -8,7 +8,7 @@
         "url": "https://github.com/zamzterz/vscode-writing-suite.git"
     },
     "license": "MIT",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "engines": {
         "vscode": "^1.60.0"
     },
@@ -87,6 +87,7 @@
         "vscode:prepublish": "npm run esbuild-base -- --minify",
         "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
         "compile": "npm run esbuild-base -- --sourcemap",
+        "deploy": "vsce publish --baseImagesUrl https://github.com/zamzterz/vscode-writing-suite/raw/HEAD/outline-writer --baseContentUrl https://github.com/zamzterz/vscode-writing-suite/raw/HEAD/outline-writer",
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile && npm run lint",
         "lint": "eslint src --ext ts",
