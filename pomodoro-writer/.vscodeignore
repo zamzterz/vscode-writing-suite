@@ -12,6 +12,5 @@ src/**
 
 out/
 node_modules
-.parcel-cache
 images/
 !images/icon.png
