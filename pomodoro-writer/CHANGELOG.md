@@ -2,6 +2,12 @@
 
 All notable changes to the "pomodoro-writer" extension will be documented in this file.
 
+## 2.0.1 (2021-12-17)
+No functional changes.
+
+- Replace Parcel with esbuild for bundling.
+- Upgrade dependencies.
+
 ## 2.0.0 (2021-10-12)
 - Fix Timer.reset. (#2)
 - Fix title of pause command. (#3)
