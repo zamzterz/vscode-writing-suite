@@ -1,0 +1,17 @@
+.outline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.outline-item {
+    border: solid 1px var(--vscode-textBlockQuote-border);
+    border-radius: 5px;
+    padding: 4px;
+}
+
+.outline-title {
+    text-align: center;
+    font-weight: bold;
+}
