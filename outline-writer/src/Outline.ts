@@ -1,12 +1,12 @@
 import { promises as fs } from 'fs';
-
 import matter from 'gray-matter';
 import * as path from 'path';
+
 
 export class OutlineItem {
     public readonly title: string;
 
-    constructor(public readonly relativePath: string, title?: string, private synopsis?: string) {
+    constructor(public readonly relativePath: string, title?: string, public readonly synopsis?: string) {
         this.title = title ?? path.parse(relativePath).name;
     }
 
@@ -42,10 +42,6 @@ export default class Outline {
             }
         }
         return new Outline(outlineFilename, successfulResults);
-    }
-
-    serialize(): string {
-        return this.items.map((item) => item.relativePath).join('\n');
     }
 
     toString(): string {

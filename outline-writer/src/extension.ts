@@ -3,7 +3,7 @@ import OutlineController from './OutlineController';
 
 
 export function activate(context: vscode.ExtensionContext) {
-    const controller = new OutlineController();
+    const controller = new OutlineController(context.extensionUri);
     context.subscriptions.push(controller);
 
     context.subscriptions.push(

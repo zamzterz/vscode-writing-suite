@@ -3,10 +3,12 @@ import * as vscode from 'vscode';
 import Outline from './Outline';
 import OutlineProvider from './OutlineProvider';
 import getOutline from './OutlineParser';
+import HtmlRenderer from './HtmlRenderer';
 
 enum OutlineFormat {
     markdown = 'md',
-    plaintext = 'txt'
+    plaintext = 'txt',
+    html = 'html'
 }
 
 export default class OutlineController implements vscode.Disposable {
@@ -17,8 +19,9 @@ export default class OutlineController implements vscode.Disposable {
 
     private outlineFormat: OutlineFormat = OutlineFormat.plaintext;
     private outlineProvider = new OutlineProvider();
+    private htmlRenderer: HtmlRenderer;
 
-    constructor() {
+    constructor(extensionUri: vscode.Uri) {
         const disposables: vscode.Disposable[] = [];
 
         const outlineTreeView = vscode.window.createTreeView(
@@ -49,6 +52,9 @@ export default class OutlineController implements vscode.Disposable {
             }
         }, null, disposables);
 
+        this.htmlRenderer = new HtmlRenderer(extensionUri);
+        disposables.push(this.htmlRenderer);
+
         this.disposable = vscode.Disposable.from(...disposables);
 
         this.updateConfig();
@@ -63,6 +69,9 @@ export default class OutlineController implements vscode.Disposable {
                 // force refresh as the outline might already be showing with stale content
                 vscode.commands.executeCommand('markdown.preview.refresh');
                 break;
+            case OutlineFormat.html:
+                this.htmlRenderer.render(outline, docUri);
+                break;
             default:
                 const doc = await vscode.workspace.openTextDocument(docUri);
                 vscode.window.showTextDocument(doc, { preview: false });
@@ -70,13 +79,7 @@ export default class OutlineController implements vscode.Disposable {
     }
 
     private virtualDocUri(outlineFilename: string): vscode.Uri {
-        let extension = OutlineFormat.plaintext;
-        switch (this.outlineFormat) {
-            case OutlineFormat.markdown:
-                extension = OutlineFormat.markdown;
-                break;
-        }
-        return vscode.Uri.parse(`${OutlineController.extensionName}:${outlineFilename}.${extension}`);
+        return vscode.Uri.parse(`${OutlineController.extensionName}:${outlineFilename}.${this.outlineFormat}`);
     }
 
     updateConfig() {
@@ -134,6 +137,7 @@ export default class OutlineController implements vscode.Disposable {
                 }
 
                 this.outlineProvider.refresh(outline, docUri);
+                this.htmlRenderer.render(outline, docUri, false);
             }
         });
 

@@ -36,7 +36,8 @@
                     "default": "txt",
                     "enum": [
                         "txt",
-                        "md"
+                        "md",
+                        "html"
                     ],
                     "enumDescriptions": [
                         "Format the outline as plain text.",
