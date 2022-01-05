@@ -31,6 +31,16 @@ Display text outline, gathered from files with synopsis in YAML front matter.
    $ find . -name "*.md" | sort > .outline
    ```
 
+   The outline file may also contain inline notes, which can be created by prepending the line with `note:`:
+   ```txt
+   ./0. Foreword.md
+   ./Chapter 1/1. Getting started.md
+   ./Chapter 1/2. Moving on.md
+   note: We can have some notes inlined here as well.
+   ./Chapter 2/At the disco/Dancing.md
+   note: We're done!
+   ```
+
 
 ## Features
 
