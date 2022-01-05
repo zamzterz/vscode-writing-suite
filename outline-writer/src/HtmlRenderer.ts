@@ -75,15 +75,15 @@ export default class HtmlRenderer implements vscode.Disposable {
     }
 
     private async outlineItemHtml(item: OutlineItem): Promise<string> {
-        let renderedSynopsis = '';
-        if (item.synopsis) {
-            renderedSynopsis = await vscode.commands.executeCommand('markdown.api.render', item.synopsis);
+        let renderedText = '';
+        if (item.text) {
+            renderedText = await vscode.commands.executeCommand('markdown.api.render', item.text);
         }
 
         const itemHtml = `
         <div class="outline-item">
             <div class="outline-title">${item.title}</div>
-            <div class="outline-synopsis">${renderedSynopsis}</div>
+            <div class="outline-text">${renderedText}</div>
         </div>
         `;
 

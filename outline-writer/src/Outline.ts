@@ -4,32 +4,33 @@ import * as path from 'path';
 
 
 export class OutlineItem {
-    public readonly title: string;
-
-    constructor(public readonly relativePath: string, title?: string, public readonly synopsis?: string) {
-        this.title = title ?? path.parse(relativePath).name;
-    }
+    constructor(public readonly title: string, public readonly text?: string) { }
 
     toString(): string {
-        return `${this.title}:\n${this.synopsis ?? ''}`;
+        return `${this.title}:\n${this.text ?? ''}`;
     }
 
     toMarkdown(): string {
-        return `# ${this.title}\n${this.synopsis ?? ''}`;
+        return `# ${this.title}\n${this.text ?? ''}`;
     }
 }
 
 export default class Outline {
-    constructor(public readonly outlineFilename: string, public readonly items: OutlineItem[]) { }
+    constructor(public readonly outlineFilename: string, public readonly items: Array<OutlineItem>) { }
 
-    static async fromFileList(outlineFilename: string, outlineItems: Array<string>): Promise<Outline> {
+    static async fromList(outlineFilename: string, outlineItems: Array<string>): Promise<Outline> {
         const rootPath = path.dirname(outlineFilename);
-        const itemWithSynopsis = outlineItems.map(async (relativePath) => {
-            const fileData = await fs.readFile(path.join(rootPath, relativePath), { encoding: 'utf-8' });
+        const itemWithSynopsis = outlineItems.map(async (item) => {
+            if (item.startsWith('note:')) {
+                return new OutlineItem('NOTE', item.substring(5).trim());
+            }
+
+            const fileData = await fs.readFile(path.join(rootPath, item), { encoding: 'utf-8' });
             const parsedFrontMatter = matter(fileData);
             const synopsis = parsedFrontMatter.data.synopsis;
             const title = parsedFrontMatter.data.title;
-            return new OutlineItem(relativePath, title, synopsis);
+            const itemTitle = title ?? path.parse(item).name;
+            return new OutlineItem(itemTitle, synopsis);
         });
         const items = await Promise.allSettled(itemWithSynopsis);
 
