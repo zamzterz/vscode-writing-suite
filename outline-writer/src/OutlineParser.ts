@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import Outline from './Outline';
 
-function getFileList(files: string): string[] {
+function filterEmptyLines(files: string): string[] {
     if (!files) {
         return [];
     }
@@ -11,14 +11,13 @@ function getFileList(files: string): string[] {
 }
 
 export default async function getOutline(outlineFilename: string): Promise<Outline | null> {
-    let outlineFiles = null;
+    let outlineList = null;
     try {
-        // try to read existing outline file
-        outlineFiles = await fs.readFile(outlineFilename, { encoding: 'utf-8' });
+        outlineList = await fs.readFile(outlineFilename, { encoding: 'utf-8' });
     } catch (err: any) {
         console.error(`Could not load outline: ${err}`);
         return null;
     }
 
-    return await Outline.fromFileList(outlineFilename, getFileList(outlineFiles));
+    return await Outline.fromList(outlineFilename, filterEmptyLines(outlineList));
 }
