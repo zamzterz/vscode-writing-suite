@@ -2,6 +2,9 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.3.0 (2022-01-11)
+- Open file in editor when selecting it in the tree view.
+
 ## 1.2.0 (2022-01-05)
 - Support inline notes in outline file.
 
