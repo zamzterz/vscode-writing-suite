@@ -41,7 +41,16 @@ class OutlineTreeDataProvider implements vscode.TreeDataProvider<OutlineTreeItem
             if (item.filePath) {
                 resourceUri = vscode.Uri.parse(`file://${item.filePath}`, true);
             }
-            return new OutlineTreeItem(`"${item.title}"`, resourceUri);
+
+            let label = item.title;
+            if (!item.filePath && item.text) {
+                /* This is a non-empty inline note.
+                   Include its text directly in the
+                   label since there is no associated
+                   file. */
+                label += `: ${item.text}`;
+            }
+            return new OutlineTreeItem(`${label}`, resourceUri);
         }));
     }
 
