@@ -36,7 +36,13 @@ class OutlineTreeDataProvider implements vscode.TreeDataProvider<OutlineTreeItem
             return Promise.resolve([]);
         }
 
-        return Promise.resolve(this.outline.items.map((item) => new OutlineTreeItem(`"${item.title}"`)));
+        return Promise.resolve(this.outline.items.map((item) => {
+            let resourceUri;
+            if (item.filePath) {
+                resourceUri = vscode.Uri.parse(`file://${item.filePath}`, true);
+            }
+            return new OutlineTreeItem(`"${item.title}"`, resourceUri);
+        }));
     }
 
     readonly onDidChangeTreeData = this.onDidChangeEmitter.event;
@@ -48,11 +54,16 @@ class OutlineTreeDataProvider implements vscode.TreeDataProvider<OutlineTreeItem
 }
 
 class OutlineTreeItem extends vscode.TreeItem {
-    constructor(public readonly label: string) {
+    constructor(label: string, public readonly resourceUri?: vscode.Uri) {
         super(label, vscode.TreeItemCollapsibleState.None);
+        if (this.resourceUri) {
+            this.command = {
+                title: 'Open file',
+                command: 'vscode.open',
+                arguments: [this.resourceUri],
+            }
+        }
     }
-
-    iconPath = vscode.ThemeIcon.File;
 }
 
 class OutlineDocumentProvider implements vscode.TextDocumentContentProvider {

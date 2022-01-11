@@ -4,7 +4,7 @@ import * as path from 'path';
 
 
 export class OutlineItem {
-    constructor(public readonly title: string, public readonly text?: string) { }
+    constructor(public readonly title: string, public readonly text?: string, public readonly filePath?: string) { }
 
     toString(): string {
         return `${this.title}:\n${this.text ?? ''}`;
@@ -25,12 +25,13 @@ export default class Outline {
                 return new OutlineItem('NOTE', item.substring(5).trim());
             }
 
-            const fileData = await fs.readFile(path.join(rootPath, item), { encoding: 'utf-8' });
+            const filePath = path.join(rootPath, item)
+            const fileData = await fs.readFile(filePath, { encoding: 'utf-8' });
             const parsedFrontMatter = matter(fileData);
             const synopsis = parsedFrontMatter.data.synopsis;
             const title = parsedFrontMatter.data.title;
             const itemTitle = title ?? path.parse(item).name;
-            return new OutlineItem(itemTitle, synopsis);
+            return new OutlineItem(itemTitle, synopsis, filePath);
         });
         const items = await Promise.allSettled(itemWithSynopsis);
 
