@@ -2,6 +2,9 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.4.0 (2022-01-24)
+- Lock preview for Markdown format.
+
 ## 1.3.1 (2022-01-11)
 - Show inline note content directly in tree view label.
 
