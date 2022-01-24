@@ -2,6 +2,9 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.4.1 (2022-01-24)
+- Enable find widget for HTML format (in web view).
+
 ## 1.4.0 (2022-01-24)
 - Lock preview for Markdown format.
 
