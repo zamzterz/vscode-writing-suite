@@ -20,7 +20,8 @@ export default class HtmlRenderer implements vscode.Disposable {
                 `Outline: ${title}`,
                 vscode.ViewColumn.One,
                 {
-                    localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, 'media')]
+                    enableFindWidget: true,
+                    localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, 'media')],
                 }
             );
             this.panel.onDidDispose(() => {
