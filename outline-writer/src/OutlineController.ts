@@ -65,7 +65,7 @@ export default class OutlineController implements vscode.Disposable {
 
         switch (this.outlineFormat) {
             case OutlineFormat.markdown:
-                await vscode.commands.executeCommand('markdown.showPreview', docUri);
+                await vscode.commands.executeCommand('markdown.showPreview', docUri, null, { locked: true });
                 // force refresh as the outline might already be showing with stale content
                 vscode.commands.executeCommand('markdown.preview.refresh');
                 break;
