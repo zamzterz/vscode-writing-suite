@@ -47,6 +47,7 @@ Display text outline, gathered from files with synopsis in YAML front matter.
 This extension supports the following fields in YAML front matter:
 * `title`: May be empty, defaults to the filename.
 * `synopsis`: May be empty, defaults to empty string.
+* `color`: Background color (only applies to HTML format) in CSS hex color format. May be empty, defaults to transparent.
 
 The generated outline is accessible either via the Activity Bar, or via the context menu when right-clicking a `.outline` file in the File Explorer.
 
@@ -56,6 +57,8 @@ The generated outline is accessible either via the Activity Bar, or via the cont
 This extension contributes the following settings:
 
 * `outline-writer.outlineFormat`: which format the outline should be rendered as.
+* `outline-writer.defaultColor`: default color for items in the outline (only applies to HTML format)
+* `outline-writer.noteColor`: color for notes in the outline (only applies to HTML format)
 
 
 #### Icon

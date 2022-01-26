@@ -2,8 +2,9 @@ import path from 'path';
 import * as vscode from 'vscode';
 import Outline from './Outline';
 import OutlineProvider from './OutlineProvider';
-import getOutline from './OutlineParser';
 import HtmlRenderer from './HtmlRenderer';
+import OutlineParser from './OutlineParser';
+import { parseHex } from './Color';
 
 enum OutlineFormat {
     markdown = 'md',
@@ -19,6 +20,7 @@ export default class OutlineController implements vscode.Disposable {
 
     private outlineFormat: OutlineFormat = OutlineFormat.plaintext;
     private outlineProvider = new OutlineProvider();
+    private outlineParser: OutlineParser;
     private htmlRenderer: HtmlRenderer;
 
     constructor(extensionUri: vscode.Uri) {
@@ -51,6 +53,8 @@ export default class OutlineController implements vscode.Disposable {
                 this.updateConfig();
             }
         }, null, disposables);
+
+        this.outlineParser = new OutlineParser();
 
         this.htmlRenderer = new HtmlRenderer(extensionUri);
         disposables.push(this.htmlRenderer);
@@ -85,10 +89,16 @@ export default class OutlineController implements vscode.Disposable {
     updateConfig() {
         const config = vscode.workspace.getConfiguration(OutlineController.extensionName);
         this.outlineFormat = config.get<OutlineFormat>('outlineFormat') ?? OutlineFormat.plaintext;
+
+        const outlineConfig = {
+            noteColor: parseHex(config.noteColor) ?? undefined,
+            defaultColor: parseHex(config.defaultColor) ?? undefined,
+        }
+        this.outlineParser.setConfig(outlineConfig);
     }
 
     async loadOutline(filename: string) {
-        const outline = await getOutline(filename);
+        const outline = await this.outlineParser.getOutline(filename);
         if (outline === null) {
             vscode.window.showWarningMessage(`Could not read outline file.`);
             return;
@@ -130,7 +140,7 @@ export default class OutlineController implements vscode.Disposable {
         outlineFileWatcher.onDidChange(async (e) => {
             if (e.fsPath === filename) {
                 // outline file changed
-                const outline = await getOutline(filename);
+                const outline = await this.outlineParser.getOutline(filename);
                 if (outline === null) {
                     console.error('Could not reload outline');
                     return;
