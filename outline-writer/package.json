@@ -34,6 +34,7 @@
                 "outline-writer.outlineFormat": {
                     "type": "string",
                     "default": "txt",
+                    "description": "Format to render the outline.",
                     "enum": [
                         "txt",
                         "md",
@@ -41,7 +42,8 @@
                     ],
                     "enumDescriptions": [
                         "Format the outline as plain text.",
-                        "Format the outline as Markdown."
+                        "Format the outline as Markdown.",
+                        "Format the outline as HTML."
                     ]
                 },
                 "outline-writer.defaultColor": {
