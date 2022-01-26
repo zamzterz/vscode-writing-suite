@@ -2,6 +2,10 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.5.0 (2022-01-26)
+- Allow background color for outline items.
+- Add missing descriptions for config.
+
 ## 1.4.1 (2022-01-24)
 - Enable find widget for HTML format (in web view).
 
