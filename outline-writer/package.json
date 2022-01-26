@@ -43,6 +43,18 @@
                         "Format the outline as plain text.",
                         "Format the outline as Markdown."
                     ]
+                },
+                "outline-writer.defaultColor": {
+                    "type": ["string", "null"],
+                    "format": "color-hex",
+                    "default": null,
+                    "description": "Default background color of items."
+                },
+                "outline-writer.noteColor": {
+                    "type": ["string", "null"],
+                    "format": "color-hex",
+                    "default": null,
+                    "description": "Background color of notes."
                 }
             }
         },

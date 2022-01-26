@@ -1,5 +1,6 @@
 import path from 'path';
 import * as vscode from 'vscode';
+import { RGBA } from './Color';
 import Outline, { OutlineItem } from './Outline';
 
 export default class HtmlRenderer implements vscode.Disposable {
@@ -44,7 +45,7 @@ export default class HtmlRenderer implements vscode.Disposable {
                 <meta charset="UTF-8">
                 <meta http-equiv="Content-Security-Policy" content="
                     default-src 'none';
-                    style-src ${webview.cspSource};
+                    style-src ${webview.cspSource} 'unsafe-inline';
                     ">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <link href="${styleUri}" rel="stylesheet">
@@ -81,8 +82,9 @@ export default class HtmlRenderer implements vscode.Disposable {
             renderedText = await vscode.commands.executeCommand('markdown.api.render', item.text);
         }
 
+        const customStyle = item.color ? `style="background-color: ${this.formatColorString(item.color)};"` : '';
         const itemHtml = `
-        <div class="outline-item">
+        <div class="outline-item" ${customStyle}>
             <div class="outline-title">${item.title}</div>
             <div class="outline-text">${renderedText}</div>
         </div>
@@ -93,5 +95,9 @@ export default class HtmlRenderer implements vscode.Disposable {
 
     dispose() {
         this.panel?.dispose();
+    }
+
+    private formatColorString(color: RGBA): string {
+        return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a.toFixed(2)})`;
     }
 }

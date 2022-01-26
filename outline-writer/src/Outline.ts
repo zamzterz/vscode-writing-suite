@@ -1,10 +1,12 @@
 import { promises as fs } from 'fs';
 import matter from 'gray-matter';
 import * as path from 'path';
+import { parseHex, RGBA } from './Color';
+import OutlineConfig from './OutlineConfig';
 
 
 export class OutlineItem {
-    constructor(public readonly title: string, public readonly text?: string, public readonly filePath?: string) { }
+    constructor(public readonly title: string, public readonly text?: string, public readonly filePath?: string, public readonly color?: RGBA) { }
 
     toString(): string {
         return `${this.title}:\n${this.text ?? ''}`;
@@ -18,11 +20,11 @@ export class OutlineItem {
 export default class Outline {
     constructor(public readonly outlineFilename: string, public readonly items: Array<OutlineItem>) { }
 
-    static async fromList(outlineFilename: string, outlineItems: Array<string>): Promise<Outline> {
+    static async fromList(outlineFilename: string, outlineItems: Array<string>, config: OutlineConfig): Promise<Outline> {
         const rootPath = path.dirname(outlineFilename);
         const itemWithSynopsis = outlineItems.map(async (item) => {
             if (item.startsWith('note:')) {
-                return new OutlineItem('NOTE', item.substring(5).trim());
+                return new OutlineItem('NOTE', item.substring(5).trim(), undefined, config.noteColor ?? config.defaultColor);
             }
 
             const filePath = path.join(rootPath, item)
@@ -31,7 +33,8 @@ export default class Outline {
             const synopsis = parsedFrontMatter.data.synopsis;
             const title = parsedFrontMatter.data.title;
             const itemTitle = title ?? path.parse(item).name;
-            return new OutlineItem(itemTitle, synopsis, filePath);
+            const color = parseHex(parsedFrontMatter.data.color) ?? config.defaultColor;
+            return new OutlineItem(itemTitle, synopsis, filePath, color);
         });
         const items = await Promise.allSettled(itemWithSynopsis);
 
