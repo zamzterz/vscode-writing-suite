@@ -2,6 +2,9 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.5.1 (2022-02-21)
+- Display 'date' field from YAML metadata in rendered outline.
+
 ## 1.5.0 (2022-01-26)
 - Allow background color for outline items.
 - Add missing descriptions for config.

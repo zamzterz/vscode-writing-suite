@@ -48,6 +48,7 @@ This extension supports the following fields in YAML front matter:
 * `title`: May be empty, defaults to the filename.
 * `synopsis`: May be empty, defaults to empty string.
 * `color`: Background color (only applies to HTML format) in CSS hex color format. May be empty, defaults to transparent.
+* `date`: May be empty, defaults to empty string.
 
 The generated outline is accessible either via the Activity Bar, or via the context menu when right-clicking a `.outline` file in the File Explorer.
 
