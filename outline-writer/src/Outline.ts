@@ -4,16 +4,24 @@ import * as path from 'path';
 import { parseHex, RGBA } from './Color';
 import OutlineConfig from './OutlineConfig';
 
+export interface OutlineItemMetadata {
+    readonly title: string,
+    readonly text?: string,
+    readonly date?: string,
+    readonly color?: RGBA
+}
 
 export class OutlineItem {
-    constructor(public readonly title: string, public readonly text?: string, public readonly filePath?: string, public readonly color?: RGBA) { }
+    constructor(public metadata: OutlineItemMetadata, public readonly filePath?: string) { }
+
+    private formattedDateString: string = this.metadata.date ? ` (${this.metadata.date})` : '';
 
     toString(): string {
-        return `${this.title}:\n${this.text ?? ''}`;
+        return `${this.metadata.title}${this.formattedDateString}:\n${this.metadata.text ?? ''}`;
     }
 
     toMarkdown(): string {
-        return `# ${this.title}\n${this.text ?? ''}`;
+        return `# ${this.metadata.title}${this.formattedDateString}\n${this.metadata.text ?? ''}`;
     }
 }
 
@@ -24,17 +32,24 @@ export default class Outline {
         const rootPath = path.dirname(outlineFilename);
         const itemWithSynopsis = outlineItems.map(async (item) => {
             if (item.startsWith('note:')) {
-                return new OutlineItem('NOTE', item.substring(5).trim(), undefined, config.noteColor ?? config.defaultColor);
+                const metadata = {
+                    title: 'NOTE',
+                    text: item.substring(5).trim(),
+                    color: config.noteColor ?? config.defaultColor,
+                };
+                return new OutlineItem(metadata, undefined);
             }
 
             const filePath = path.join(rootPath, item)
             const fileData = await fs.readFile(filePath, { encoding: 'utf-8' });
             const parsedFrontMatter = matter(fileData);
-            const synopsis = parsedFrontMatter.data.synopsis;
-            const title = parsedFrontMatter.data.title;
-            const itemTitle = title ?? path.parse(item).name;
-            const color = parseHex(parsedFrontMatter.data.color) ?? config.defaultColor;
-            return new OutlineItem(itemTitle, synopsis, filePath, color);
+            const metadata = {
+                title: parsedFrontMatter.data.title ?? path.parse(item).name,
+                text: parsedFrontMatter.data.synopsis,
+                date: parsedFrontMatter.data.date,
+                color: parseHex(parsedFrontMatter.data.color) ?? config.defaultColor,
+            }
+            return new OutlineItem(metadata, filePath);
         });
         const items = await Promise.allSettled(itemWithSynopsis);
 

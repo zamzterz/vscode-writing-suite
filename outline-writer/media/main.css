@@ -14,4 +14,10 @@
 .outline-title {
     text-align: center;
     font-weight: bold;
+    font-size: medium;
+}
+
+.outline-date {
+    font-style: italic;
+    text-align: center;
 }
