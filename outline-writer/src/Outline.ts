@@ -7,18 +7,21 @@ import OutlineConfig from './OutlineConfig';
 export interface OutlineItemMetadata {
     readonly title: string,
     readonly text?: string,
+    readonly date?: string,
     readonly color?: RGBA
 }
 
 export class OutlineItem {
     constructor(public metadata: OutlineItemMetadata, public readonly filePath?: string) { }
 
+    private formattedDateString: string = this.metadata.date ? ` (${this.metadata.date})` : '';
+
     toString(): string {
-        return `${this.title}:\n${this.text ?? ''}`;
+        return `${this.metadata.title}${this.formattedDateString}:\n${this.metadata.text ?? ''}`;
     }
 
     toMarkdown(): string {
-        return `# ${this.title}\n${this.text ?? ''}`;
+        return `# ${this.metadata.title}${this.formattedDateString}\n${this.metadata.text ?? ''}`;
     }
 }
 
@@ -43,6 +46,7 @@ export default class Outline {
             const metadata = {
                 title: parsedFrontMatter.data.title ?? path.parse(item).name,
                 text: parsedFrontMatter.data.synopsis,
+                date: parsedFrontMatter.data.date,
                 color: parseHex(parsedFrontMatter.data.color) ?? config.defaultColor,
             }
             return new OutlineItem(metadata, filePath);

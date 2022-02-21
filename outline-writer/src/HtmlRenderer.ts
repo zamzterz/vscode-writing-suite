@@ -86,6 +86,7 @@ export default class HtmlRenderer implements vscode.Disposable {
         const itemHtml = `
         <div class="outline-item" ${customStyle}>
             <div class="outline-title">${item.metadata.title}</div>
+            <div class="outline-date">${item.metadata.date ?? ''}</div>
             <div class="outline-text">${renderedText}</div>
         </div>
         `;
