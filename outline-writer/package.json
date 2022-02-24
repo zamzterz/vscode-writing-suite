@@ -105,7 +105,7 @@
         "deploy": "vsce publish --baseImagesUrl https://github.com/zamzterz/vscode-writing-suite/raw/HEAD/outline-writer --baseContentUrl https://github.com/zamzterz/vscode-writing-suite/raw/HEAD/outline-writer",
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile && npm run lint",
-        "lint": "eslint src --ext ts",
+        "lint": "eslint src --ext ts --max-warnings 0",
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {

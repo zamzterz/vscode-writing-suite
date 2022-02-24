@@ -3,7 +3,7 @@ import Outline from './Outline';
 import OutlineConfig from './OutlineConfig';
 
 export default class OutlineParser {
-    private config: OutlineConfig = {}
+    private config: OutlineConfig = {};
 
     setConfig(config: OutlineConfig) {
         this.config = config;
