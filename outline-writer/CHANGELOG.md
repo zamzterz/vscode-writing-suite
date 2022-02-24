@@ -2,6 +2,9 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.6.0 (2022-02-24)
+- Don't reopen rendered outline when showing tree view.
+
 ## 1.5.1 (2022-02-21)
 - Display 'date' field from YAML metadata in rendered outline.
 
