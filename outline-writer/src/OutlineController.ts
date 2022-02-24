@@ -30,16 +30,6 @@ export default class OutlineController implements vscode.Disposable {
             `${OutlineController.extensionName}.outlineList`,
             { treeDataProvider: this.outlineProvider.treeDataProvider }
         );
-        outlineTreeView.onDidChangeVisibility(async (e) => {
-            if (e.visible) {
-                if (!this.outlineProvider.outline) {
-                    return;
-                }
-
-                // show rendered outline again (might have been closed by the user)
-                await this.showOutline(this.outlineProvider.outline);
-            }
-        });
         disposables.push(outlineTreeView);
 
         const outlineDocument = vscode.workspace.registerTextDocumentContentProvider(
