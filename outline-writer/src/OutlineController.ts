@@ -83,7 +83,7 @@ export default class OutlineController implements vscode.Disposable {
         const outlineConfig = {
             noteColor: parseHex(config.noteColor) ?? undefined,
             defaultColor: parseHex(config.defaultColor) ?? undefined,
-        }
+        };
         this.outlineParser.setConfig(outlineConfig);
     }
 

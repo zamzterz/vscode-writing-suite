@@ -70,7 +70,7 @@ class OutlineTreeItem extends vscode.TreeItem {
                 title: 'Open file',
                 command: 'vscode.open',
                 arguments: [this.resourceUri],
-            }
+            };
         }
     }
 }

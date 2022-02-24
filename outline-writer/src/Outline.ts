@@ -40,7 +40,7 @@ export default class Outline {
                 return new OutlineItem(metadata, undefined);
             }
 
-            const filePath = path.join(rootPath, item)
+            const filePath = path.join(rootPath, item);
             const fileData = await fs.readFile(filePath, { encoding: 'utf-8' });
             const parsedFrontMatter = matter(fileData);
             const metadata = {
@@ -48,7 +48,7 @@ export default class Outline {
                 text: parsedFrontMatter.data.synopsis,
                 date: parsedFrontMatter.data.date,
                 color: parseHex(parsedFrontMatter.data.color) ?? config.defaultColor,
-            }
+            };
             return new OutlineItem(metadata, filePath);
         });
         const items = await Promise.allSettled(itemWithSynopsis);
