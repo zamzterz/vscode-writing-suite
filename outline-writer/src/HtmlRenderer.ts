@@ -22,6 +22,7 @@ export default class HtmlRenderer implements vscode.Disposable {
                 vscode.ViewColumn.One,
                 {
                     enableFindWidget: true,
+                    enableScripts: true,
                     localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, 'media')],
                 }
             );
@@ -36,6 +37,7 @@ export default class HtmlRenderer implements vscode.Disposable {
 
     private async getHtmlForWebview(outline: Outline, webview: vscode.Webview): Promise<string> {
         const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'media', 'main.css'));
+        const jsUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'media', 'main.js'));
 
         const outlineContent = await this.outlineHtml(outline);
         const html = `
@@ -46,9 +48,11 @@ export default class HtmlRenderer implements vscode.Disposable {
                 <meta http-equiv="Content-Security-Policy" content="
                     default-src 'none';
                     style-src ${webview.cspSource} 'unsafe-inline';
+                    script-src ${webview.cspSource};
                     ">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <link href="${styleUri}" rel="stylesheet">
+                <script defer src="${jsUri}"></script>
 
                 <title>Outline View</title>
             </head>
