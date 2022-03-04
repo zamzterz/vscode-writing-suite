@@ -2,6 +2,9 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.6.1 (2022-03-04)
+- Persist scroll position of rendered HTML outline.
+
 ## 1.6.0 (2022-02-24)
 - Don't reopen rendered outline when showing tree view.
 
