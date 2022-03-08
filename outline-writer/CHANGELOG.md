@@ -2,6 +2,9 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.6.2 (2022-03-08)
+- Show outline item index in rendered output.
+
 ## 1.6.1 (2022-03-04)
 - Persist scroll position of rendered HTML outline.
 
