@@ -89,7 +89,10 @@ export default class HtmlRenderer implements vscode.Disposable {
         const customStyle = item.metadata.color ? `style="background-color: ${this.formatColorString(item.metadata.color)};"` : '';
         const itemHtml = `
         <div class="outline-item" ${customStyle}>
-            <div class="outline-title">${item.metadata.title}</div>
+            <div class="outline-title-row">
+                <div class="outline-title">${item.metadata.title}</div>
+                <div>(${item.metadata.index})</div>
+            </div>
             <div class="outline-date">${item.metadata.date ?? ''}</div>
             <div class="outline-text">${renderedText}</div>
         </div>

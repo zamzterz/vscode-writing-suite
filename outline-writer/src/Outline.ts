@@ -6,6 +6,7 @@ import OutlineConfig from './OutlineConfig';
 
 export interface OutlineItemMetadata {
     readonly title: string,
+    readonly index: number,
     readonly text?: string,
     readonly date?: string,
     readonly color?: RGBA
@@ -15,13 +16,14 @@ export class OutlineItem {
     constructor(public metadata: OutlineItemMetadata, public readonly filePath?: string) { }
 
     private formattedDateString: string = this.metadata.date ? ` (${this.metadata.date})` : '';
+    private title: string = `${this.metadata.index}: ${this.metadata.title}${this.formattedDateString}`;
 
     toString(): string {
-        return `${this.metadata.title}${this.formattedDateString}:\n${this.metadata.text ?? ''}`;
+        return `${this.title}\n${this.metadata.text ?? ''}`;
     }
 
     toMarkdown(): string {
-        return `# ${this.metadata.title}${this.formattedDateString}\n${this.metadata.text ?? ''}`;
+        return `# ${this.title}\n${this.metadata.text ?? ''}`;
     }
 }
 
@@ -30,10 +32,11 @@ export default class Outline {
 
     static async fromList(outlineFilename: string, outlineItems: Array<string>, config: OutlineConfig): Promise<Outline> {
         const rootPath = path.dirname(outlineFilename);
-        const itemWithSynopsis = outlineItems.map(async (item) => {
+        const itemWithSynopsis = outlineItems.map(async (item, index) => {
             if (item.startsWith('note:')) {
                 const metadata = {
                     title: 'NOTE',
+                    index,
                     text: item.substring(5).trim(),
                     color: config.noteColor ?? config.defaultColor,
                 };
@@ -45,6 +48,7 @@ export default class Outline {
             const parsedFrontMatter = matter(fileData);
             const metadata = {
                 title: parsedFrontMatter.data.title ?? path.parse(item).name,
+                index,
                 text: parsedFrontMatter.data.synopsis,
                 date: parsedFrontMatter.data.date,
                 color: parseHex(parsedFrontMatter.data.color) ?? config.defaultColor,
