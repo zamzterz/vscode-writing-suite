@@ -2,6 +2,9 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.6.3 (2022-03-09)
+- Fix centering of title in HTML outline.
+
 ## 1.6.2 (2022-03-08)
 - Show outline item index in rendered output.
 
