@@ -94,18 +94,21 @@ body {
 }
 
 .timeline-date {
+    --width: 13em;
+
     position: absolute;
     top: 0;
-    left: 0;
-    transform: translate(-150%, -50%);
+    left: calc(-1 * (var(--width) + var(--horizontalSpacing) + 1em));
+    transform: translate(0, -50%);
 
-    margin: 0;
-    padding-right: 0.5em;
+    width: var(--width);
+    box-sizing: border-box;
+    margin-bottom: 10px;
 
     font-size: 14px;
     font-style: oblique;
-    margin-bottom: 10px;
     letter-spacing: 2px;
+    text-align: right;
 }
 
 @media only screen and (max-width: 600px) {
@@ -119,7 +122,10 @@ body {
     .timeline-date {
         /* place above entry on the right */
         position: relative;
+        top: 0;
+        left: 0;
         transform: none;
+        text-align: left;
     }
 }
 
