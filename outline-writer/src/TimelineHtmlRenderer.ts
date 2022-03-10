@@ -62,7 +62,7 @@ export default class TimelineHtmlRenderer extends HtmlRenderer {
             <input id="${collapsibleId}" class="toggle" type="checkbox">
             <label for="${collapsibleId}" class="label-toggle">${header}</label>
             <div class="collapsible-content">${renderedText}</div>
-            `
+            `;
         } else {
             innerItemContent = header;
         }

@@ -1,23 +1,60 @@
 import * as vscode from 'vscode';
+import config from './config';
 import Outline from './Outline';
+import OutlineController from './OutlineController';
 
-export default class OutlineProvider {
-    public readonly treeDataProvider;
-    public readonly documentProvider;
+export default class OutlineProvider implements vscode.Disposable {
+    private treeDataProvider;
+    private outlineDocumentProvider;
+    private timelineDocumentProvider;
+
+    private disposable: vscode.Disposable;
 
     constructor(private _outline?: Outline) {
         this.treeDataProvider = new OutlineTreeDataProvider();
-        this.documentProvider = new OutlineDocumentProvider();
+        this.outlineDocumentProvider = new OutlineDocumentProvider();
+        this.timelineDocumentProvider = new TimelineDocumentProvider();
+
+        const disposables: vscode.Disposable[] = [];
+        disposables.push(vscode.workspace.registerTextDocumentContentProvider(
+            OutlineDocumentProvider.supportedScheme,
+            this.outlineDocumentProvider)
+        );
+        disposables.push(vscode.workspace.registerTextDocumentContentProvider(
+            TimelineDocumentProvider.supportedScheme,
+            this.timelineDocumentProvider)
+        );
+
+        const outlineTreeView = vscode.window.createTreeView(
+            `${config.extensionName}.outlineList`,
+            { treeDataProvider: this.treeDataProvider }
+        );
+        disposables.push(outlineTreeView);
+
+        this.disposable = vscode.Disposable.from(...disposables);
     }
 
     public get outline(): Outline | undefined {
         return this._outline;
     }
 
-    refresh(outline: Outline, docUri: vscode.Uri) {
+    public outlineVirtualDocUri(outlineFilename: string, outlineFormat: OutlineFormat): vscode.Uri {
+        return this.outlineDocumentProvider.virtualDocUri(outlineFilename, outlineFormat);
+    }
+
+    public timelineVirtualDocUri(outlineFilename: string, outlineFormat: OutlineFormat): vscode.Uri {
+        return this.timelineDocumentProvider.virtualDocUri(outlineFilename, outlineFormat);
+    }
+
+    refresh(outline: Outline, outlineFormat: OutlineFormat) {
         this._outline = outline;
         this.treeDataProvider.refresh(outline);
-        this.documentProvider.refresh(docUri, outline);
+        this.outlineDocumentProvider.refresh(outline, outlineFormat);
+        this.timelineDocumentProvider.refresh(outline, outlineFormat);
+    }
+
+    dispose() {
+        this.disposable.dispose();
     }
 }
 
@@ -76,6 +113,7 @@ class OutlineTreeItem extends vscode.TreeItem {
 }
 
 class OutlineDocumentProvider implements vscode.TextDocumentContentProvider {
+    public static supportedScheme = `${config.extensionName}-outline`;
     private onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
 
     constructor(private outline?: Outline) { }
@@ -94,8 +132,39 @@ class OutlineDocumentProvider implements vscode.TextDocumentContentProvider {
 
     readonly onDidChange = this.onDidChangeEmitter.event;
 
-    refresh(uri: vscode.Uri, outline: Outline) {
+    refresh(outline: Outline, outlineFormat: OutlineFormat) {
         this.outline = outline;
-        this.onDidChangeEmitter.fire(uri);
+        this.onDidChangeEmitter.fire(this.virtualDocUri(outline.outlineFilename, outlineFormat));
+    }
+
+    virtualDocUri(outlineFilename: string, outlineFormat: OutlineFormat): vscode.Uri {
+        return vscode.Uri.parse(`${OutlineDocumentProvider.supportedScheme}:${outlineFilename}.${outlineFormat}`);
+    }
+}
+
+class TimelineDocumentProvider implements vscode.TextDocumentContentProvider {
+    public static supportedScheme = `${config.extensionName}-timeline`;
+    private onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
+
+    constructor(private outline?: Outline) { }
+
+    provideTextDocumentContent(uri: vscode.Uri): string {
+        if (!this.outline) {
+            return '';
+        }
+
+        const timeline = this.outline.items.map((item) => `${item.metadata.title}: ${item.metadata.date ?? ''}`);
+        return timeline.join('\n');
+    }
+
+    readonly onDidChange = this.onDidChangeEmitter.event;
+
+    refresh(outline: Outline, outlineFormat: OutlineFormat) {
+        this.outline = outline;
+        this.onDidChangeEmitter.fire(this.virtualDocUri(outline.outlineFilename, outlineFormat));
+    }
+
+    virtualDocUri(outlineFilename: string, outlineFormat: OutlineFormat): vscode.Uri {
+        return vscode.Uri.parse(`${TimelineDocumentProvider.supportedScheme}:${outlineFilename}.${outlineFormat}`);
     }
 }

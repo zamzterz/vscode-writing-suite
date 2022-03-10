@@ -8,9 +8,9 @@ export default abstract class HtmlRenderer implements vscode.Disposable {
 
     constructor(protected extensionUri: vscode.Uri, protected title: string) { }
 
-    async render(outline: Outline, docUri: vscode.Uri, createIfNotExists: boolean = true) {
-        const filename = path.basename(docUri.path);
-        const title = `${this.title}: ${filename}`
+    async render(outline: Outline, createIfNotExists: boolean = true) {
+        const filename = path.basename(outline.outlineFilename);
+        const title = `${this.title}: ${filename}`;
         if (!this.panel) {
             if (!createIfNotExists) {
                 // do nothing if the panel has been disposed or not created yet
@@ -36,7 +36,7 @@ export default abstract class HtmlRenderer implements vscode.Disposable {
         this.panel.webview.html = await this.getHtmlForWebview(outline, this.panel.webview);
     }
 
-    abstract getHtmlForWebview(outline: Outline, webview: vscode.Webview): Promise<string>
+    abstract getHtmlForWebview(outline: Outline, webview: vscode.Webview): Promise<string>;
 
     protected formatColorString(color: RGBA): string {
         return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a.toFixed(2)})`;
