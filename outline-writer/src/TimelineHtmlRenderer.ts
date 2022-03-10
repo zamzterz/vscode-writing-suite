@@ -41,11 +41,9 @@ export default class TimelineHtmlRenderer extends HtmlRenderer {
 
         const timelineHtml = `
         <div class="container">
-            <div class="timeline">
-                <ul>
-                    ${itemsHtml}
-                </ul>
-            </div>
+            <ul class="timeline">
+                ${itemsHtml}
+            </ul>
         </div>
         `;
 
@@ -55,26 +53,27 @@ export default class TimelineHtmlRenderer extends HtmlRenderer {
     private async timelineItemHtml(item: OutlineItem, index: number): Promise<string> {
         const customStyle = item.metadata.color ? `style="background-color: ${this.formatColorString(item.metadata.color)};"` : '';
 
+        const header = `<h2>${item.metadata.title}</h2>`;
         let innerItemContent = '';
         if (item.metadata.text) {
             const renderedText = await vscode.commands.executeCommand('markdown.api.render', item.metadata.text);
             const collapsibleId = `collapsible${index}`;
             innerItemContent = `
             <input id="${collapsibleId}" class="toggle" type="checkbox">
-            <label for="${collapsibleId}" class="label-toggle"><h1>${item.metadata.title}</h1></label>
+            <label for="${collapsibleId}" class="label-toggle">${header}</label>
             <div class="collapsible-content">${renderedText}</div>
             `
         } else {
-            innerItemContent = `
-            <h1>${item.metadata.title}</h1>
-            `
+            innerItemContent = header;
         }
 
         const itemHtml = `
-        <li ${customStyle}>
-            <div class="timeline-date">${item.metadata.date ?? ''}</div>
-            <div class="timeline-content">
+        <li>
+            <div class="date">${item.metadata.date ?? ''}</div>
+            <div class="timeline-mark"></div>
+            <div class="content">
                 ${innerItemContent}
+                <div>(${item.metadata.index})</div>
             </div>
         </li>
         `;
