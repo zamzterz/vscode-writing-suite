@@ -39,15 +39,17 @@ export default class TimelineHtmlRenderer extends HtmlRenderer {
             itemsHtml += await this.timelineItemHtml(item, index);
         }
 
-        const outlineHtml = `
-        <div class="timeline">
-            <ul>
-                ${itemsHtml}
-            </ul>
+        const timelineHtml = `
+        <div class="container">
+            <div class="timeline">
+                <ul>
+                    ${itemsHtml}
+                </ul>
+            </div>
         </div>
         `;
 
-        return outlineHtml;
+        return timelineHtml;
     }
 
     private async timelineItemHtml(item: OutlineItem, index: number): Promise<string> {

@@ -1,9 +1,12 @@
 :root {
     --timelineColor: var(--vscode-list-activeSelectionBackground);
+    /* --timelineColor: green; */
     --textColor: var(--vscode-list-activeSelectionForeground);
-    --lightColor: white;
-    --leftPosition: 50%;
-    --horizontalSpacing: 30px;
+    --horizontalSpacing: 20px;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
@@ -11,13 +14,13 @@ body {
     font-weight: 300;
 }
 
-.timeline {
-    max-width: 40%;
-    height: auto;
-    min-height: 100vh;
-
+.container {
+    width: 100%;
     position: relative;
-    margin: 0 auto;
+}
+
+.timeline {
+    position: relative;
 
     display: flex;
     align-items: center;
@@ -25,12 +28,11 @@ body {
 }
 
 /* vertical timeline */
-.timeline:before {
+.timeline ul:before {
     content: '';
     position: absolute;
     top: 0;
-    left: var(--leftPosition);
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% - var(--horizontalSpacing)));
     width: 4px;
     height: 100%;
     background-color: var(--timelineColor);
@@ -40,12 +42,11 @@ body {
     margin: 0;
     padding: 0;
     list-style: none;
+    max-width: 70%;
 }
 
 .timeline ul li {
     position: relative;
-    left: var(--leftPosition);
-    transform: translateX(var(--horizontalSpacing));
     margin-bottom: 30px;
     padding: 10px;
 
@@ -53,7 +54,6 @@ body {
     color: var(--textColor);
 
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
     border-radius: 0px 10px 10px 10px;
 }
 
@@ -71,9 +71,26 @@ body {
     width: var(--size);
     border-radius: 50%;
     background-color: var(--timelineColor);
-    top: 0px;
-    transform: translate(-50%, -50%);
-    left: calc(-1 * var(--horizontalSpacing));
+    top: 0;
+    left: 0;
+    transform: translateX(calc(-50% - var(--horizontalSpacing)));
+}
+
+.timeline-date {
+    --width: 13em;
+
+    position: absolute;
+    top: 0;
+    left: calc(-1 * (var(--width) + var(--horizontalSpacing) + 1em));
+
+    width: var(--width);
+    box-sizing: border-box;
+    margin-bottom: 10px;
+
+    font-size: 14px;
+    font-style: oblique;
+    letter-spacing: 2px;
+    text-align: right;
 }
 
 .timeline ul li:hover::before {
@@ -91,24 +108,6 @@ body {
 .timeline-content p {
     font-size: 16px;
     line-height: 1.25em;
-}
-
-.timeline-date {
-    --width: 13em;
-
-    position: absolute;
-    top: 0;
-    left: calc(-1 * (var(--width) + var(--horizontalSpacing) + 1em));
-    transform: translate(0, -50%);
-
-    width: var(--width);
-    box-sizing: border-box;
-    margin-bottom: 10px;
-
-    font-size: 14px;
-    font-style: oblique;
-    letter-spacing: 2px;
-    text-align: right;
 }
 
 @media only screen and (max-width: 600px) {
