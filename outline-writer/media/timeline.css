@@ -1,0 +1,155 @@
+:root {
+    --timelineColor: var(--vscode-list-activeSelectionBackground);
+    --textColor: var(--vscode-list-activeSelectionForeground);
+    --lightColor: white;
+    --leftPosition: 50%;
+    --horizontalSpacing: 30px;
+}
+
+body {
+    font-family: sans-serif;
+    font-weight: 300;
+}
+
+.timeline {
+    max-width: 40%;
+    height: auto;
+    min-height: 100vh;
+
+    position: relative;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* vertical timeline */
+.timeline:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: var(--leftPosition);
+    transform: translateX(-50%);
+    width: 4px;
+    height: 100%;
+    background-color: var(--timelineColor);
+}
+
+.timeline ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.timeline ul li {
+    position: relative;
+    left: var(--leftPosition);
+    transform: translateX(var(--horizontalSpacing));
+    margin-bottom: 30px;
+    padding: 10px;
+
+    background-color: var(--timelineColor);
+    color: var(--textColor);
+
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    border-radius: 0px 10px 10px 10px;
+}
+
+.timeline ul li:last-child {
+  margin-bottom: 0;
+}
+
+/* points on timeline */
+.timeline ul li::before {
+    --size: 15px;
+
+    content: '';
+    position: absolute;
+    height: var(--size);
+    width: var(--size);
+    border-radius: 50%;
+    background-color: var(--timelineColor);
+    top: 0px;
+    transform: translate(-50%, -50%);
+    left: calc(-1 * var(--horizontalSpacing));
+}
+
+.timeline ul li:hover::before {
+    background-color: var(--vscode-list-focusOutline);
+}
+
+.timeline-content h1 {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.timeline-content p {
+    font-size: 16px;
+    line-height: 1.25em;
+}
+
+.timeline-date {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-150%, -50%);
+
+    margin: 0;
+    padding-right: 0.5em;
+
+    font-size: 14px;
+    font-style: oblique;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+@media only screen and (max-width: 600px) {
+    .timeline {
+        /* place the timeline to the left */
+        margin-left: 5vw;
+        transform: translateX(-50%);
+        min-width: 100%;
+    }
+
+    .timeline-date {
+        /* place above entry on the right */
+        position: relative;
+        transform: none;
+    }
+}
+
+
+/* ========== COLLAPSIBLE ========== */
+input.toggle {
+    display: none;
+}
+
+.label-toggle {
+    cursor: pointer;
+}
+
+.collapsible-content {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height .25s ease-in-out;
+    box-sizing: border-box;
+}
+
+.toggle:checked + .label-toggle + .collapsible-content {
+    max-height: 100vh;
+}
+
+.label-toggle:before {
+    content: '\25B8';
+    float: right;
+    transition: transform .25s ease-in-out;
+  }
+
+.toggle:checked + .label-toggle:before {
+    transform: rotate(90deg);
+}

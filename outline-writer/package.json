@@ -17,6 +17,7 @@
     ],
     "activationEvents": [
         "onCommand:outline-writer.showOutline",
+        "onCommand:outline-writer.showTimeline",
         "onView:outline-writer.outlineList"
     ],
     "main": "./dist/extension.js",
@@ -25,7 +26,11 @@
         "commands": [
             {
                 "command": "outline-writer.showOutline",
-                "title": "Outline writer: Show"
+                "title": "Outline writer: Outline"
+            },
+            {
+                "command": "outline-writer.showTimeline",
+                "title": "Outline writer: Timeline"
             }
         ],
         "configuration": {
@@ -65,11 +70,19 @@
                 {
                     "command": "outline-writer.showOutline",
                     "when": "resourceFilename == .outline || resourceExtname == .outline"
+                },
+                {
+                    "command": "outline-writer.showTimeline",
+                    "when": "resourceFilename == .outline || resourceExtname == .outline"
                 }
             ],
             "commandPalette": [
                 {
                     "command": "outline-writer.showOutline",
+                    "when": "false"
+                },
+                {
+                    "command": "outline-writer.showTimeline",
                     "when": "false"
                 }
             ]

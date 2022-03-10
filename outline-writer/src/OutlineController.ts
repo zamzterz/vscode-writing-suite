@@ -2,9 +2,10 @@ import path from 'path';
 import * as vscode from 'vscode';
 import Outline from './Outline';
 import OutlineProvider from './OutlineProvider';
-import HtmlRenderer from './HtmlRenderer';
 import OutlineParser from './OutlineParser';
 import { parseHex } from './Color';
+import OutlineHtmlRenderer from './OutlineHtmlRenderer';
+import TimelineHtmlRenderer from './TimelineHtmlRenderer';
 
 enum OutlineFormat {
     markdown = 'md',
@@ -18,10 +19,12 @@ export default class OutlineController implements vscode.Disposable {
     private disposable: vscode.Disposable;
     private outlineFileWatcher?: vscode.FileSystemWatcher;
 
+    private loadedOutline: Outline | null = null;
     private outlineFormat: OutlineFormat = OutlineFormat.plaintext;
     private outlineProvider = new OutlineProvider();
     private outlineParser: OutlineParser;
-    private htmlRenderer: HtmlRenderer;
+    private outlineHtmlRenderer: OutlineHtmlRenderer;
+    private timelineHtmlRenderer: TimelineHtmlRenderer;
 
     constructor(extensionUri: vscode.Uri) {
         const disposables: vscode.Disposable[] = [];
@@ -46,16 +49,22 @@ export default class OutlineController implements vscode.Disposable {
 
         this.outlineParser = new OutlineParser();
 
-        this.htmlRenderer = new HtmlRenderer(extensionUri);
-        disposables.push(this.htmlRenderer);
+        this.outlineHtmlRenderer = new OutlineHtmlRenderer(extensionUri, 'Outline');
+        disposables.push(this.outlineHtmlRenderer);
+        this.timelineHtmlRenderer = new TimelineHtmlRenderer(extensionUri, 'Timeline');
+        disposables.push(this.timelineHtmlRenderer);
 
         this.disposable = vscode.Disposable.from(...disposables);
 
         this.updateConfig();
     }
 
-    private async showOutline(outline: Outline) {
-        const docUri = this.virtualDocUri(outline.outlineFilename);
+    async showOutline() {
+        if (!this.loadedOutline) {
+            return;
+        }
+
+        const docUri = this.virtualDocUri(this.loadedOutline.outlineFilename);
 
         switch (this.outlineFormat) {
             case OutlineFormat.markdown:
@@ -64,12 +73,20 @@ export default class OutlineController implements vscode.Disposable {
                 vscode.commands.executeCommand('markdown.preview.refresh');
                 break;
             case OutlineFormat.html:
-                this.htmlRenderer.render(outline, docUri);
+                this.outlineHtmlRenderer.render(this.loadedOutline, docUri);
                 break;
             default:
                 const doc = await vscode.workspace.openTextDocument(docUri);
                 vscode.window.showTextDocument(doc, { preview: false });
         }
+    }
+
+    async showTimeline() {
+        if (!this.loadedOutline) {
+            return;
+        }
+        const docUri = this.virtualDocUri(this.loadedOutline.outlineFilename);
+        this.timelineHtmlRenderer.render(this.loadedOutline, docUri);
     }
 
     private virtualDocUri(outlineFilename: string): vscode.Uri {
@@ -88,19 +105,22 @@ export default class OutlineController implements vscode.Disposable {
     }
 
     async loadOutline(filename: string) {
-        const outline = await this.outlineParser.getOutline(filename);
-        if (outline === null) {
+        if (filename === this.loadedOutline?.outlineFilename) {
+            // same outline is already loaded
+            return;
+        }
+
+        this.loadedOutline = await this.outlineParser.getOutline(filename);
+        if (this.loadedOutline === null) {
             vscode.window.showWarningMessage(`Could not read outline file.`);
             return;
         }
 
         const docUri = this.virtualDocUri(filename);
-        this.outlineProvider.refresh(outline, docUri);
+        this.outlineProvider.refresh(this.loadedOutline, docUri);
         // replace outline file watcher
         this.outlineFileWatcher?.dispose();
         this.outlineFileWatcher = this.createOutlineFileWatcher(filename, docUri);
-
-        await this.showOutline(outline);
     }
 
     async selectOutlineFile() {
@@ -137,7 +157,8 @@ export default class OutlineController implements vscode.Disposable {
                 }
 
                 this.outlineProvider.refresh(outline, docUri);
-                this.htmlRenderer.render(outline, docUri, false);
+                this.outlineHtmlRenderer.render(outline, docUri, false);
+                this.timelineHtmlRenderer.render(outline, docUri, false);
             }
         });
 
