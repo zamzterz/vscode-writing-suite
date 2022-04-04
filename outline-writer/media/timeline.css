@@ -1,0 +1,196 @@
+:root {
+    --evenColor: #3594cb;
+    --oddColor: #6cbfee;
+    --timelineColor: #afdcf8;
+    --timelineLeftPosition: 20%;
+    --timelineMarkYOffset: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    width: 90%;
+    max-width: 69em;
+}
+
+.timeline {
+    position: relative;
+    padding: 0;
+    list-style: none;
+}
+
+/* The vertical line */
+.timeline:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--timelineLeftPosition);
+    width: 10px;
+    background: var(--timelineColor);
+    transform: translateX(-50%);
+}
+
+.timeline>li {
+    position: relative;
+}
+
+.timeline>li .date {
+    position: absolute;
+    top: var(--timelineMarkYOffset);
+    width: 25%;
+    padding-right: 75px;
+
+    text-align: right;
+    font-size: 1.2em;
+    color: var(--evenColor);
+}
+
+.timeline>li:nth-child(odd) .date {
+    color: var(--oddColor);
+}
+
+.timeline>li .content {
+    position: relative;
+    background: var(--evenColor);
+    color: #fff;
+    margin: 0 0 15px 25%;
+    padding: 1em;
+    border-radius: 5px;
+    font-size: 1.2em;
+    overflow-wrap: break-word;
+}
+
+.timeline>li:nth-child(odd) .content {
+    background: var(--oddColor);
+}
+
+.timeline>li .content h2 {
+    margin-top: 0px;
+    padding: 0 0 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    font-size: 1.25em;
+}
+
+p:first-child {
+    margin-top: 0;
+}
+
+/* The triangle on the box */
+.timeline>li .content:after {
+    content: '';
+    position: absolute;
+    top: var(--timelineMarkYOffset);
+    right: 100%;
+    height: 0;
+    width: 0;
+
+    pointer-events: none;
+    border: solid transparent;
+    border-right-color: var(--evenColor);
+    border-width: 10px;
+}
+
+.timeline>li:nth-child(odd) .content:after {
+    border-right-color: var(--oddColor);
+}
+
+.item-index {
+    position: absolute;
+    top: 0;
+    right: 2px;
+
+    font-size: small;
+}
+
+.timeline>li .timeline-mark {
+    position: absolute;
+    top: 0;
+    left: var(--timelineLeftPosition);
+    transform: translate(-50%, var(--timelineMarkYOffset));
+    width: 20px;
+    height: 20px;
+
+    background: #46a4da;
+    color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 5px var(--timelineColor);
+}
+
+@media screen and (max-width: 600px) {
+    :root {
+        --timelineLeftPosition: -10px;
+    }
+
+    .container {
+        margin: 0 auto;
+    }
+
+    .timeline>li .date {
+        position: relative;
+        top: 0;
+        width: 100%;
+        margin-left: 0.25em;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .timeline>li .content {
+        min-width: 250px;
+        margin: 0 0 30px 0;
+        font-weight: 400;
+    }
+
+    /* The triangle on the box */
+    .timeline>li .content:after {
+        top: -20px;
+        right: auto;
+        left: 20px;
+        border-right-color: transparent;
+        border-bottom-color: var(--evenColor);
+    }
+
+    .timeline>li:nth-child(odd) .content:after {
+        border-right-color: transparent;
+        border-bottom-color: var(--oddColor);
+    }
+
+    .timeline>li .timeline-mark {
+        width: 10px;
+        height: 10px;
+        box-shadow: 0 0 0 4px var(--timelineColor);
+        transform: translate(-50%, 50%);
+    }
+}
+
+/* ========== COLLAPSIBLE ========== */
+input.toggle {
+    display: none;
+}
+
+.label-toggle {
+    cursor: pointer;
+}
+
+.collapsible-content {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height .25s ease-in-out;
+    box-sizing: border-box;
+}
+
+.toggle:checked+.label-toggle+.collapsible-content {
+    max-height: 100vh;
+}
+
+.label-toggle:before {
+    content: '\25B8';
+    float: right;
+    transition: transform .25s ease-in-out;
+}
+
+.toggle:checked+.label-toggle:before {
+    transform: rotate(90deg);
+}
