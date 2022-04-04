@@ -73,7 +73,7 @@ export default class TimelineHtmlRenderer extends HtmlRenderer {
             <div class="timeline-mark"></div>
             <div class="content">
                 ${innerItemContent}
-                <div>(${item.metadata.index})</div>
+                <div class="item-index">(${item.metadata.index})</div>
             </div>
         </li>
         `;

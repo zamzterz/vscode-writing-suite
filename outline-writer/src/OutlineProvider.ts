@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import config from './config';
 import Outline from './Outline';
-import OutlineController from './OutlineController';
+import { OutlineFormat } from './OutlineFormat';
 
 export default class OutlineProvider implements vscode.Disposable {
     private treeDataProvider;

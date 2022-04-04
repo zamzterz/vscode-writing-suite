@@ -7,6 +7,7 @@ import OutlineParser from './OutlineParser';
 import { parseHex } from './Color';
 import OutlineHtmlRenderer from './OutlineHtmlRenderer';
 import TimelineHtmlRenderer from './TimelineHtmlRenderer';
+import { OutlineFormat } from './OutlineFormat';
 
 export default class OutlineController implements vscode.Disposable {
     private disposable: vscode.Disposable;

@@ -1,116 +1,122 @@
 :root {
     --evenColor: #3594cb;
     --oddColor: #6cbfee;
+    --timelineColor: #afdcf8;
     --timelineLeftPosition: 20%;
+    --timelineMarkYOffset: 10px;
 }
 
 * {
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    color: #47a3da;
-}
-
 .container {
-	width: 90%;
-	max-width: 69em;
-    margin: 0;
+    width: 90%;
+    max-width: 69em;
 }
 
 .timeline {
-	margin: 30px 0 0 0;
-	padding: 0;
-	list-style: none;
-	position: relative;
+    position: relative;
+    padding: 0;
+    list-style: none;
 }
 
-/* The line */
+/* The vertical line */
 .timeline:before {
-	content: '';
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	width: 10px;
-	background: #afdcf8;
-	left: var(--timelineLeftPosition);
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--timelineLeftPosition);
+    width: 10px;
+    background: var(--timelineColor);
     transform: translateX(-50%);
 }
 
-/* The date/time */
-.timeline > li {
-	position: relative;
+.timeline>li {
+    position: relative;
 }
 
-.timeline > li .date {
-	width: 25%;
-	padding-right: 100px;
-	position: absolute;
+.timeline>li .date {
+    position: absolute;
+    top: var(--timelineMarkYOffset);
+    width: 25%;
+    padding-right: 75px;
 
     text-align: right;
     font-size: 1.2em;
     color: var(--evenColor);
 }
 
-.timeline > li:nth-child(odd) .date {
-	color: var(--oddColor);
+.timeline>li:nth-child(odd) .date {
+    color: var(--oddColor);
 }
 
-/* Right content */
-.timeline > li .content {
-	margin: 0 0 15px 25%;
-	background: var(--evenColor);
-	color: #fff;
-	padding: 2em;
-	font-size: 1.2em;
-	font-weight: 300;
-	line-height: 1.4;
-	position: relative;
-	border-radius: 5px;
+.timeline>li .content {
+    position: relative;
+    background: var(--evenColor);
+    color: #fff;
+    margin: 0 0 15px 25%;
+    padding: 1em;
+    border-radius: 5px;
+    font-size: 1.2em;
+    overflow-wrap: break-word;
 }
 
-.timeline > li:nth-child(odd) .content {
-	background: var(--oddColor);
+.timeline>li:nth-child(odd) .content {
+    background: var(--oddColor);
 }
 
-.timeline > li .content h2 {
-	margin-top: 0px;
-	padding: 0 0 10px 0;
-	border-bottom: 1px solid rgba(255,255,255,0.4);
+.timeline>li .content h2 {
+    margin-top: 0px;
+    padding: 0 0 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     font-size: 1.25em;
 }
 
-/* The triangle */
-.timeline > li .content:after {
-	right: 100%;
-	border: solid transparent;
-	content: '';
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-	border-right-color: var(--evenColor);
-	border-width: 10px;
-	top: 10px;
+p:first-child {
+    margin-top: 0;
 }
 
-.timeline > li:nth-child(odd) .content:after {
-	border-right-color: var(--oddColor);
+/* The triangle on the box */
+.timeline>li .content:after {
+    content: '';
+    position: absolute;
+    top: var(--timelineMarkYOffset);
+    right: 100%;
+    height: 0;
+    width: 0;
+
+    pointer-events: none;
+    border: solid transparent;
+    border-right-color: var(--evenColor);
+    border-width: 10px;
 }
 
-/* The icons */
-.timeline > li .timeline-mark {
-	width: 20px;
-	height: 20px;
-	position: absolute;
-	color: #fff;
-	background: #46a4da;
-	border-radius: 50%;
-	box-shadow: 0 0 0 5px #afdcf8;
-	left: var(--timelineLeftPosition);
-	top: 0;
-    transform: translate(-50%, 10px);
+.timeline>li:nth-child(odd) .content:after {
+    border-right-color: var(--oddColor);
+}
+
+.item-index {
+    position: absolute;
+    top: 0;
+    right: 2px;
+
+    font-size: small;
+}
+
+.timeline>li .timeline-mark {
+    position: absolute;
+    top: 0;
+    left: var(--timelineLeftPosition);
+    transform: translate(-50%, var(--timelineMarkYOffset));
+    width: 20px;
+    height: 20px;
+
+    background: #46a4da;
+    color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 5px var(--timelineColor);
 }
 
 @media screen and (max-width: 600px) {
@@ -120,43 +126,43 @@ body {
 
     .container {
         margin: 0 auto;
-        padding: 0 1.875em 3.125em 1.875em;
     }
 
-	.timeline > li .date {
-		width: 100%;
-		position: relative;
+    .timeline>li .date {
+        position: relative;
+        top: 0;
+        width: 100%;
         margin-left: 0.25em;
-		margin-bottom: 20px;
+        margin-bottom: 10px;
         text-align: left;
-	}
+    }
 
-	.timeline > li .content {
-		margin: 0 0 30px 0;
-		padding: 1em;
-		font-weight: 400;
-	}
+    .timeline>li .content {
+        min-width: 250px;
+        margin: 0 0 30px 0;
+        font-weight: 400;
+    }
 
-	.timeline > li .content:after {
-		right: auto;
-		left: 20px;
-		border-right-color: transparent;
-		border-bottom-color: var(--evenColor);
-		top: -20px;
-	}
+    /* The triangle on the box */
+    .timeline>li .content:after {
+        top: -20px;
+        right: auto;
+        left: 20px;
+        border-right-color: transparent;
+        border-bottom-color: var(--evenColor);
+    }
 
-	.timeline > li:nth-child(odd) .content:after {
-		border-right-color: transparent;
-		border-bottom-color: var(--oddColor);
-	}
+    .timeline>li:nth-child(odd) .content:after {
+        border-right-color: transparent;
+        border-bottom-color: var(--oddColor);
+    }
 
-	.timeline > li .timeline-mark {
-        /* left: -10px; */
+    .timeline>li .timeline-mark {
         width: 10px;
-	    height: 10px;
-        box-shadow: 0 0 0 4px #afdcf8;
+        height: 10px;
+        box-shadow: 0 0 0 4px var(--timelineColor);
         transform: translate(-50%, 50%);
-	}
+    }
 }
 
 /* ========== COLLAPSIBLE ========== */
@@ -175,7 +181,7 @@ input.toggle {
     box-sizing: border-box;
 }
 
-.toggle:checked + .label-toggle + .collapsible-content {
+.toggle:checked+.label-toggle+.collapsible-content {
     max-height: 100vh;
 }
 
@@ -183,8 +189,8 @@ input.toggle {
     content: '\25B8';
     float: right;
     transition: transform .25s ease-in-out;
-  }
+}
 
-.toggle:checked + .label-toggle:before {
+.toggle:checked+.label-toggle:before {
     transform: rotate(90deg);
 }
