@@ -2,6 +2,9 @@
 
 All notable changes to the "outline-writer" extension will be documented in this file.
 
+## 1.7.0 (2022-04-04)
+- Add "Timeline view" showing the outline along a vertical timeline.
+
 ## 1.6.3 (2022-03-09)
 - Fix centering of title in HTML outline.
 
