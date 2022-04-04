@@ -73,7 +73,7 @@ export default class OutlineController implements vscode.Disposable {
                 this.timelineHtmlRenderer.render(this.loadedOutline);
                 break;
             default:
-                const docUri = this.outlineProvider.outlineVirtualDocUri(this.loadedOutline.outlineFilename, this.outlineFormat);
+                const docUri = this.outlineProvider.timelineVirtualDocUri(this.loadedOutline.outlineFilename, this.outlineFormat);
                 const doc = await vscode.workspace.openTextDocument(docUri);
                 vscode.window.showTextDocument(doc, { preview: false });
         }
